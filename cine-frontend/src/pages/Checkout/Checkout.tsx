@@ -1,27 +1,26 @@
 import { useLocation } from "react-router-dom";
+import { Seats } from "../../components/Seats/Seats";
 
 export default function Checkout() {
-  const location = useLocation();
-  const { film, day, time, seats } = location.state || {};
-
-  console.log("=== DATOS RECIBIDOS EN CHECKOUT ===");
-  console.log("Film:", film);
-  console.log("Day:", day);
-  console.log("Time:", time);
-  console.log("Seats:", seats);
+  const { state } = useLocation() as any;
+  const { film, funcionId, day, time, seats } = state || {};
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold text-center mb-8">
-          ¡Compra Confirmada!
+          Resumen de la compra
         </h1>
+
+        {funcionId && <Seats funcionId={funcionId} />}
 
         <div className="bg-neutral-800 rounded-lg p-6 space-y-4">
           <h2 className="text-xl font-semibold">Resumen</h2>
 
           <div>
-            <h3 className="font-medium">{film || "Título de la película"}</h3>
+            <h3 className="font-medium">
+              {film?.title || "Título de la película"}
+            </h3>
           </div>
 
           <hr className="border-neutral-700" />
@@ -38,22 +37,6 @@ export default function Checkout() {
               </p>
             </div>
           </div>
-
-          {seats && seats.length > 0 && (
-            <div>
-              <h4 className="text-sm text-neutral-400 mb-1">Asientos</h4>
-              <div className="flex flex-wrap gap-2">
-                {seats.map((seat, index) => (
-                  <span
-                    key={index}
-                    className="bg-red-600 px-2 py-1 rounded text-sm"
-                  >
-                    Fila {seat.fila} - Asiento {seat.columna}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
 
           <div className="border-t border-neutral-700 pt-4">
             <div className="flex justify-between items-center">

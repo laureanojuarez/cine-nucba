@@ -35,7 +35,7 @@ export default function LoginPage(): JSX.Element {
       localStorage.setItem("token", res.data.token);
       navigate("/");
     } catch (err) {
-      setError("Error al iniciar sesion");
+      setError(err.response.data.message);
       console.error("Error en el inicio de sesion", err);
     } finally {
       setLoading(false);
@@ -71,7 +71,7 @@ export default function LoginPage(): JSX.Element {
           }}
           onSubmit={handleSubmit}
         >
-          <Form className="flex flex-col gap-4">
+          <Form className="flex flex-col gap-4" noValidate>
             <Field type="email" name="email" placeholder="Email" />
             <ErrorMessage
               name="email"

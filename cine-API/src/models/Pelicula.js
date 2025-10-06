@@ -19,4 +19,9 @@ export const Pelicula = sequelize.define("pelicula", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  externalId: {
+    type: DataTypes.INTEGER,
+    unique: true,
+    allowNull: true,
+  },
 });
