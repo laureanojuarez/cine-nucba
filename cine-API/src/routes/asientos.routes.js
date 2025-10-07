@@ -1,16 +1,16 @@
-import { Router } from "express";
-import { Funcion } from "../models/Funcion.js";
-import { Sala } from "../models/Sala.js";
-import { Pelicula } from "../models/Pelicula.js";
-import { Asiento } from "../models/Asiento.js";
-import { Entrada } from "../models/Entrada.js";
+import {Router} from "express";
+import {Funcion} from "../models/Funcion.js";
+import {Sala} from "../models/Sala.js";
+import {Pelicula} from "../models/Pelicula.js";
+import {Asiento} from "../models/Asiento.js";
+import {Entrada} from "../models/Entrada.js";
 
 export const funcionesRouter = Router();
 
 // Listar funciones (opcional filtrado por peliculaId)
 funcionesRouter.get("/", async (req, res) => {
   try {
-    const { peliculaId } = req.query;
+    const {peliculaId} = req.query;
     const where = {};
     if (peliculaId) where.peliculaId = peliculaId;
     const funciones = await Funcion.findAll({
@@ -21,41 +21,44 @@ funcionesRouter.get("/", async (req, res) => {
     res.json(funciones);
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Error listando funciones" });
+    res.status(500).json({message: "Error listando funciones"});
   }
 });
 
 // Asientos de una función
 funcionesRouter.get("/:funcionId/asientos", async (req, res) => {
   try {
-    const { funcionId } = req.params;
+    const {funcionId} = req.params;
     console.log("GET /funciones/:funcionId/asientos", funcionId);
-    const funcion = await Funcion.findByPk(funcionId, { include: [Sala] });
-    if (!funcion) {
-      return res.status(404).json({ message: "Función no encontrada" });
-    }
 
+    // traer función con su sala
+    const funcion = await Funcion.findByPk(funcionId, {include: Sala});
+    if (!funcion) return res.status(404).json({message: "Función no existe"});
+
+    // obtener todos los asientos de la sala
     const asientos = await Asiento.findAll({
-      where: { salaId: funcion.salaId },
+      where: {salaId: funcion.salaId},
       order: [
         ["fila", "ASC"],
         ["numero", "ASC"],
       ],
     });
 
+    // obtener entradas ya creadas para esta función
     const entradas = await Entrada.findAll({
-      where: { funcionId },
+      where: {funcionId: funcion.id},
       attributes: ["asientoId"],
     });
+
     const ocupados = new Set(entradas.map((e) => e.asientoId));
 
     res.json({
       funcionId: Number(funcionId),
       sala: {
         id: funcion.salaId,
-        nombre: funcion.sala.nombre,
-        filas: funcion.sala.filas,
-        columnas: funcion.sala.columnas,
+        nombre: funcion.sala?.nombre ?? `Sala ${funcion.salaId}`,
+        filas: funcion.sala?.filas ?? 0,
+        columnas: funcion.sala?.columnas ?? 0,
       },
       asientos: asientos.map((a) => ({
         id: a.id,
@@ -67,6 +70,6 @@ funcionesRouter.get("/:funcionId/asientos", async (req, res) => {
     });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Error obteniendo asientos" });
+    res.status(500).json({message: "Error obteniendo asientos"});
   }
 });

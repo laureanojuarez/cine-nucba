@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 type BackendSeat = {
   id: number;
@@ -10,7 +11,7 @@ type BackendSeat = {
 
 type FetchResponse = {
   funcionId: number;
-  sala: { id: number; nombre: string; filas: number; columnas: number };
+  sala: {id: number; nombre: string; filas: number; columnas: number};
   asientos: BackendSeat[];
 };
 
@@ -21,12 +22,13 @@ interface SeatsProps {
 
 const API_BASE = "http://localhost:3000";
 
-export const Seats: React.FC<SeatsProps> = ({ funcionId, onConfirm }) => {
+export const Seats: React.FC<SeatsProps> = ({funcionId, onConfirm}) => {
   const [data, setData] = useState<FetchResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const navigate = useNavigate();
 
   const load = async () => {
     setLoading(true);
@@ -84,29 +86,59 @@ export const Seats: React.FC<SeatsProps> = ({ funcionId, onConfirm }) => {
     setSaving(true);
     setError(null);
     try {
-      const r = await fetch(`${API_BASE}/reservas`, {
+      const token = localStorage.getItem("token");
+      console.debug("Reserva: token raw:", token);
+
+      if (!token) {
+        console.warn("No hay token en localStorage. Redirigiendo a login.");
+        setError("No autenticado — por favor inicia sesión.");
+        setSaving(false);
+        navigate("/login");
+        return;
+      }
+
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const resp = await fetch(`${API_BASE}/reservas`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
           funcionId: data.funcionId,
-          asientos: seleccionadosArray.map((s) => s.id),
+          asientos: seleccionadosArray.map((s) => s.etiqueta),
+          precio: 1500,
         }),
       });
-      if (!r.ok) {
-        const txt = await r.text();
-        throw new Error(txt || "Error reservando");
+
+      const contentType = resp.headers.get("content-type") || "";
+      const body = contentType.includes("application/json")
+        ? await resp.json().catch(() => null)
+        : await resp.text().catch(() => null);
+
+      if (!resp.ok) {
+        console.error("Reserva fallida:", resp.status, body);
+        const msg =
+          (body && (body.error || body.message || JSON.stringify(body))) ||
+          `Error (${resp.status}) reservando`;
+        throw new Error(msg);
       }
+
+      console.debug("Reserva OK:", body);
       await load();
       if (onConfirm) onConfirm(seleccionadosArray);
     } catch (e: any) {
-      setError(e.message);
+      console.error("Error en reservar:", e);
+      setError(e.message || "Error desconocido");
     } finally {
       setSaving(false);
     }
   };
 
   if (loading) return <div>Cargando asientos...</div>;
-  if (error) return <div style={{ color: "red" }}>{error}</div>;
+  if (error) return <div style={{color: "red"}}>{error}</div>;
   if (!data) return null;
 
   const columnas = data.sala.columnas;

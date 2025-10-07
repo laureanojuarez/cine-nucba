@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {
   Form,
   Field,
@@ -7,7 +7,7 @@ import {
   type FormikHelpers,
   type FormikErrors,
 } from "formik";
-import { useState, type JSX } from "react";
+import {useState, type JSX} from "react";
 import axios from "axios";
 
 export default function LoginPage(): JSX.Element {
@@ -22,7 +22,7 @@ export default function LoginPage(): JSX.Element {
 
   const handleSubmit = async (
     values: LoginValues,
-    { setSubmitting }: FormikHelpers<LoginValues>
+    {setSubmitting}: FormikHelpers<LoginValues>
   ): Promise<void> => {
     setLoading(true);
     setError("");
@@ -32,11 +32,13 @@ export default function LoginPage(): JSX.Element {
         password: values.password,
       });
 
-      localStorage.setItem("token", res.data.token);
+      const tokenToStore = res.data && ((res.data.token ?? res.data) as string);
+      localStorage.setItem("token", tokenToStore);
       navigate("/");
-    } catch (err) {
-      setError(err.response.data.message);
-      console.error("Error en el inicio de sesion", err);
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || "Error de red";
+      setError(msg);
+      console.error("Login error:", err, msg);
     } finally {
       setLoading(false);
       setSubmitting(false);
@@ -55,7 +57,7 @@ export default function LoginPage(): JSX.Element {
       <h1>Buenas!, que bueno verte por aca</h1>
       <div className="w-96">
         <Formik
-          initialValues={{ email: "", password: "" } as LoginValues}
+          initialValues={{email: "", password: ""} as LoginValues}
           validate={(values: LoginValues) => {
             const errors: FormikErrors<LoginValues> = {};
             if (!values.email) errors.email = "Requerido";
