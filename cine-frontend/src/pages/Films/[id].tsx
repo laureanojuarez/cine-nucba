@@ -1,6 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchFilmById } from "../../api/films";
+import axios from "axios";
 
 type Film = {
   id: number;
@@ -56,21 +57,14 @@ export default function FilmDetail() {
     setCompraLoading(true);
     setCompraError(null);
     try {
-      const resp = await fetch("http://localhost:3000/peliculas/ensure", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          externalId: film.id, // TMDB id
-          titulo: film.title,
-          duracion: film.runtime || 100,
-          genero: film.genres?.[0]?.name || "General",
-        }),
+      const resp = await axios.post("http://localhost:3000/peliculas/ensure", {
+        externalId: film.id, // TMDB id
+        titulo: film.title,
+        duracion: film.runtime || 100,
+        genero: film.genres?.[0]?.name || "General",
       });
-      if (!resp.ok) {
-        const txt = await resp.text();
-        throw new Error(txt || "Error creando función");
-      }
-      const { funcionId, peliculaId } = await resp.json();
+
+      const { funcionId, peliculaId } = resp.data;
       navigate("/checkout", {
         state: {
           film: { ...film, dbId: peliculaId },
