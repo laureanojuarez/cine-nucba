@@ -1,18 +1,8 @@
 import { useEffect, useState } from "react";
-import { fetchFilms } from "../../api/films";
 import { Link } from "react-router-dom";
 
 export const FilmSection = () => {
   const [films, setFilms] = useState<any[]>([]);
-
-  useEffect(() => {
-    const load = async () => {
-      const results = await fetchFilms();
-      console.log("fetchFilms (desde App):", results);
-      setFilms(results || []);
-    };
-    load();
-  }, []);
 
   return (
     <section className="flex flex-col gap-2">

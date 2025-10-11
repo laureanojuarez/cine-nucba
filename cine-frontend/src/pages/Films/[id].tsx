@@ -1,8 +1,3 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { fetchFilmById } from "../../api/films";
-import axios from "axios";
-
 type Film = {
   id: number;
   title: string;
@@ -16,69 +11,12 @@ type Film = {
 };
 
 export default function FilmDetail() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [film, setFilm] = useState<Film | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [compraLoading, setCompraLoading] = useState(false);
-  const [compraError, setCompraError] = useState<string | null>(null);
-  const token = localStorage.getItem("token");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    async function fetchFilm() {
-      try {
-        setLoading(true);
-        setError(null);
-        if (id) {
-          const data = await fetchFilmById(id);
-          setFilm(data);
-        }
-      } catch (err: any) {
-        setError("No se encontró la película");
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchFilm();
-  }, [id]);
-
-  if (loading)
-    return (
-      <div className="flex justify-center items-center h-64">Cargando...</div>
-    );
-  if (error)
-    return <div className="text-red-500 text-center">Error: {error}</div>;
-  if (!film)
-    return <div className="text-center">No se encontró la película.</div>;
 
   async function handleCheckout() {
-    if (!film) return;
-    setCompraLoading(true);
-    setCompraError(null);
-    try {
-      const resp = await axios.post("http://localhost:3000/peliculas/ensure", {
-        externalId: film.id, // TMDB id
-        titulo: film.title,
-        duracion: film.runtime || 100,
-        genero: film.genres?.[0]?.name || "General",
-      });
-
-      const { funcionId, peliculaId } = resp.data;
-      navigate("/checkout", {
-        state: {
-          film: { ...film, dbId: peliculaId },
-          funcionId,
-          // Puedes pasar day/time si quieres algo fijo:
-          day: new Date().toLocaleDateString("es-ES"),
-          time: "20:00",
-        },
-      });
-    } catch (e: any) {
-      setCompraError(e.message);
-    } finally {
-      setCompraLoading(false);
-    }
+    console.log("Iniciando proceso de compra...");
   }
 
   return (
