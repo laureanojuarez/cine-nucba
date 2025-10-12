@@ -1,0 +1,98 @@
+import prisma from "../db.js";
+
+export const addSala = async (req, res) => {
+  try {
+    const { movieId } = req.body;
+
+    if (!movieId) {
+      return res.status(400).json({ error: "Faltan datos obligatorios" });
+    }
+
+    const existMovie = await prisma.movie.findUnique({
+      where: { id: movieId },
+    });
+
+    if (!existMovie) {
+      return res.status(404).json({ error: "La película no existe" });
+    }
+
+    const sala = await prisma.sala.create({
+      data: {
+        movieId,
+      },
+    });
+
+    const filas = ["A", "B", "C", "D", "E"];
+    const asientosPorFila = 10;
+
+    const seats = [];
+    for (const fila of filas) {
+      for (let numero = 1; numero <= asientosPorFila; numero++) {
+        seats.push({
+          fila,
+          numero,
+          salaId: sala.id,
+        });
+      }
+    }
+    await prisma.seat.createMany({ data: seats });
+
+    res.status(201).json({ sala, seatsCreados: seats.length });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+export const deleteSala = async (req, res) => {
+  try {
+    const { salaId } = req.body;
+
+    if (!salaId) {
+      return res.status(400).json({ error: "Faltan datos obligatorios" });
+    }
+
+    const existSala = await prisma.sala.findUnique({
+      where: { id: salaId },
+    });
+
+    if (!existSala) {
+      return res.status(404).json({ error: "La sala no existe" });
+    }
+
+    await prisma.seat.deleteMany({
+      where: { salaId: existSala.id },
+    });
+
+    await prisma.sala.delete({
+      where: { id: existSala.id },
+    });
+
+    res.status(200).json({ message: "Sala eliminada correctamente" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+export const getSalaByMovieId = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ error: "Falta el parametro id" });
+    }
+
+    const salas = await prisma.sala.findMany({
+      where: { movieId: parseInt(id) },
+      include: { Seat: true },
+    });
+    if (salas.length === 0) {
+      return res.status(404).json({ error: "No hay salas para esta película" });
+    }
+    res.json(salas);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};

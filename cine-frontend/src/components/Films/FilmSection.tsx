@@ -1,8 +1,21 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export const FilmSection = () => {
   const [films, setFilms] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchFilms = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/peliculas");
+        setFilms(response.data);
+      } catch (error) {
+        console.error("Error fetching films:", error);
+      }
+    };
+    fetchFilms();
+  }, []);
 
   return (
     <section className="flex flex-col gap-2">
@@ -20,9 +33,7 @@ export const FilmSection = () => {
                 />
                 <figcaption className="text-center p-2">
                   <div className="font-medium">{f.title}</div>
-                  <div className="text-sm text-gray-300">
-                    {f.release_date ?? "—"} · {f.vote_average ?? "—"}
-                  </div>
+                  <div className="font-medium">{`Genero: ${f.genero}`}</div>
                 </figcaption>
               </figure>
             </li>

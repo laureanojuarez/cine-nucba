@@ -4,7 +4,7 @@ import {
   loginUser,
   registerUser,
 } from "../controllers/auth.controller.js";
-import {verifyToken} from "../controllers/verify.controller.js";
+import { verifyToken } from "../controllers/verify.controller.js";
 
 const router = express.Router();
 

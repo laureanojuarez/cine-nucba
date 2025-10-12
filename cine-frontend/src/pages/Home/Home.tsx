@@ -1,6 +1,6 @@
 import { FilmSection } from "../../components/Films/FilmSection";
 
-export default function App() {
+export default function Home() {
   return (
     <main className="">
       <FilmSection />
