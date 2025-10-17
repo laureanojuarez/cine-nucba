@@ -26,7 +26,7 @@ export const FilmSection = () => {
             <li className="w-61">
               <figure className="bg-gray-800 rounded overflow-hidden">
                 <img
-                  src={`https://image.tmdb.org/t/p/w500/${f.poster_path}`}
+                  src={f.poster || " "}
                   alt={f.title}
                   className="w-full h-auto"
                   loading="lazy"

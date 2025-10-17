@@ -1,6 +1,6 @@
-import {User} from "lucide-react";
+import { User } from "lucide-react";
 import logo_cine_rosario from "/images/logo_cine_rosario.png";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ export const Header = () => {
           <Link to="/">Películas</Link>
         </li>
 
-        <Link to={"/profile"} className="flex items-center gap-2">
+        <Link to={"/dashboard"} className="flex items-center gap-2">
           <User />
           <span></span>
         </Link>

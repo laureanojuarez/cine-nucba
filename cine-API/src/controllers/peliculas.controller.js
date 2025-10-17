@@ -25,7 +25,7 @@ export const addPelicula = async (req, res) => {
     const nuevaPelicula = await prisma.movie.create({
       data: {
         title,
-        duration,
+        duration: parseInt(duration),
         genero,
       },
     });

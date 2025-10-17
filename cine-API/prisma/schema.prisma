@@ -17,24 +17,27 @@ model User {
   id       Int       @id @default(autoincrement())
   username String    @unique
   email    String    @unique
+  role     String    @default("user")
   password String
   Reserva  Reserva[]
 }
 
 model Movie {
-  id       Int    @id @default(autoincrement())
-  title    String @unique
+  id       Int     @id @default(autoincrement())
+  title    String  @unique
   genero   String
   duration Int
   Sala     Sala[]
+  poster   String?
 }
 
 model Sala {
-  id      Int       @id @default(autoincrement())
-  movieId Int
-  movie   Movie     @relation(fields: [movieId], references: [id])
-  Seat    Seat[]
-  Reserva Reserva[]
+  id         Int       @id @default(autoincrement())
+  movieId    Int
+  salaNumber Int
+  movie      Movie     @relation(fields: [movieId], references: [id])
+  Seat       Seat[]
+  Reserva    Reserva[]
 }
 
 model Seat {

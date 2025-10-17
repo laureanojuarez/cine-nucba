@@ -2,9 +2,9 @@ import prisma from "../db.js";
 
 export const addSala = async (req, res) => {
   try {
-    const { movieId } = req.body;
+    const { movieId, salaNumber } = req.body;
 
-    if (!movieId) {
+    if (!movieId || !salaNumber) {
       return res.status(400).json({ error: "Faltan datos obligatorios" });
     }
 
@@ -16,9 +16,22 @@ export const addSala = async (req, res) => {
       return res.status(404).json({ error: "La película no existe" });
     }
 
+    const salaExistente = await prisma.sala.findFirst({
+      where: {
+        movieId,
+      },
+    });
+
+    if (salaExistente) {
+      return res
+        .status(400)
+        .json({ error: "Ya existe una sala para esta película" });
+    }
+
     const sala = await prisma.sala.create({
       data: {
         movieId,
+        salaNumber,
       },
     });
 
