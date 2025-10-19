@@ -1,14 +1,14 @@
 import { validateLoginUser } from "../helpers/validations.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import prisma from "../db.js";
+import User from "../models/User.js";
 
 export const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
 
-  const user = await prisma.user.findUnique({
+  const user = await User.findOne({
     where: {
-      email: email,
+      email,
     },
   });
 
@@ -21,12 +21,10 @@ export const registerUser = async (req, res) => {
   const salt = await bcrypt.genSalt(saltRounds);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  const newUser = await prisma.user.create({
-    data: {
-      username,
-      email,
-      password: hashedPassword,
-    },
+  const newUser = await User.create({
+    username,
+    email,
+    password: hashedPassword,
   });
 
   res.json(newUser.id);
@@ -41,7 +39,7 @@ export const loginUser = async (req, res) => {
 
   const { email, password } = req.body;
 
-  const user = await prisma.user.findUnique({
+  const user = await User.findOne({
     where: {
       email,
     },
@@ -68,9 +66,8 @@ export const loginUser = async (req, res) => {
 export const getCurrentUser = async (req, res) => {
   const userId = req.user.id;
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { id: true, username: true, email: true, role: true },
+    const user = await User.findByPk(userId, {
+      attributes: ["id", "username", "email", "role"],
     });
     if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);

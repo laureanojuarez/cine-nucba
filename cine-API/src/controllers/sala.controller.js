@@ -1,4 +1,6 @@
-import prisma from "../db.js";
+import Movie from "../models/Movie.js";
+import Sala from "../models/Sala.js";
+import Seat from "../models/Seat.js";
 
 export const addSala = async (req, res) => {
   try {
@@ -8,15 +10,13 @@ export const addSala = async (req, res) => {
       return res.status(400).json({ error: "Faltan datos obligatorios" });
     }
 
-    const existMovie = await prisma.movie.findUnique({
-      where: { id: movieId },
-    });
+    const existMovie = await Movie.findByPk(movieId);
 
     if (!existMovie) {
       return res.status(404).json({ error: "La película no existe" });
     }
 
-    const salaExistente = await prisma.sala.findFirst({
+    const salaExistente = await Sala.findOne({
       where: {
         movieId,
       },
@@ -28,7 +28,7 @@ export const addSala = async (req, res) => {
         .json({ error: "Ya existe una sala para esta película" });
     }
 
-    const sala = await prisma.sala.create({
+    const sala = await Sala.create({
       data: {
         movieId,
         salaNumber,
@@ -48,7 +48,7 @@ export const addSala = async (req, res) => {
         });
       }
     }
-    await prisma.seat.createMany({ data: seats });
+    await Seat.bulkCreate(seats);
 
     res.status(201).json({ sala, seatsCreados: seats.length });
   } catch (error) {
@@ -60,26 +60,17 @@ export const addSala = async (req, res) => {
 export const deleteSala = async (req, res) => {
   try {
     const { salaId } = req.body;
-
     if (!salaId) {
       return res.status(400).json({ error: "Faltan datos obligatorios" });
     }
 
-    const existSala = await prisma.sala.findUnique({
-      where: { id: salaId },
-    });
-
+    const existSala = await Sala.findByPk(salaId);
     if (!existSala) {
       return res.status(404).json({ error: "La sala no existe" });
     }
 
-    await prisma.seat.deleteMany({
-      where: { salaId: existSala.id },
-    });
-
-    await prisma.sala.delete({
-      where: { id: existSala.id },
-    });
+    await Seat.destroy({ where: { salaId: existSala.id } });
+    await Sala.destroy({ where: { id: existSala.id } });
 
     res.status(200).json({ message: "Sala eliminada correctamente" });
   } catch (error) {
@@ -87,7 +78,6 @@ export const deleteSala = async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
-
 export const getSalaByMovieId = async (req, res) => {
   try {
     const { id } = req.params;
@@ -96,7 +86,7 @@ export const getSalaByMovieId = async (req, res) => {
       return res.status(400).json({ error: "Falta el parametro id" });
     }
 
-    const salas = await prisma.sala.findMany({
+    const salas = await Sala.findAll({
       where: { movieId: parseInt(id) },
       include: { Seat: true },
     });
