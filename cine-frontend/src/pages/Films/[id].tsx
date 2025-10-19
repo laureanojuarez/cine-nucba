@@ -1,48 +1,13 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Seats from "../../components/Seats/Seats";
-
-type Film = {
-  id: number;
-  title: string;
-  genero: string;
-  poster?: string;
-  duration?: number;
-};
+import { useFilm } from "../../hooks/useFilms";
+import { useSalas } from "../../hooks/useSalas";
 
 export default function FilmDetail() {
   const { id } = useParams<{ id: string }>();
-  const [film, setFilm] = useState<Film>({} as Film);
-  const [salas, setSalas] = useState([]);
-
+  const { film } = useFilm(id);
+  const { salas } = useSalas(id);
   const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    const fetchFilm = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/peliculas/${id}`
-        );
-        setFilm(response.data);
-      } catch (error) {
-        console.error("Error fetching film:", error);
-      }
-    };
-    if (id) fetchFilm();
-  }, [id]);
-
-  useEffect(() => {
-    const fetchSalas = async () => {
-      try {
-        const res = await axios.get(`http://localhost:3000/salas/movie/${id}`);
-        setSalas(res.data);
-      } catch (error) {
-        console.error("Error fetching salas:", error);
-      }
-    };
-    if (id) fetchSalas();
-  }, [id]);
 
   async function handleCheckout() {
     console.log("Iniciando proceso de compra...");
@@ -51,6 +16,7 @@ export default function FilmDetail() {
   if (!film) {
     return <div>Cargando...</div>;
   }
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-900 rounded-xl shadow-lg text-white">
       <div className="flex flex-col md:flex-row gap-8 items-start">

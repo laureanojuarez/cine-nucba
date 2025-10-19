@@ -19,7 +19,7 @@ export const FilmCard = ({ film }: FilmCardProps) => {
         <img
           src={film.poster || "/placeholder.jpg"}
           alt={film.title}
-          className="w-full h-96 object-cover"
+          className="w-full  object-cover"
           loading="lazy"
         />
         <span className="absolute top-3 right-3 bg-gray-800 text-white text-xs px-2 py-1 rounded">

@@ -12,14 +12,12 @@ export default function Admin() {
 
     const addMovie = async () => {
       try {
-        const response = await axios.post(
-          "http://localhost:3000/peliculas",
-          data
-        );
-
-        await axios.post("http://localhost:3000/salas", {
-          movieId: response.data.id,
-          salaNumber: parseInt(data.sala as string),
+        const response = await axios.post("http://localhost:3000/peliculas", {
+          title: data.title,
+          genero: data.genero,
+          duration: data.duration,
+          poster: data.poster,
+          salaNumber: data.sala,
         });
 
         setMessage("Película agregada correctamente.");
@@ -90,6 +88,21 @@ export default function Admin() {
             required
             min={1}
             placeholder="En minutos"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="poster"
+            className="block font-semibold mb-1 text-gray-200"
+          >
+            Poster:
+          </label>
+          <input
+            type="text"
+            name="poster"
+            id="poster"
+            className="w-full border border-gray-600 rounded px-3 py-2 bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
         <div>

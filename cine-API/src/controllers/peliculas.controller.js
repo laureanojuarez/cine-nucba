@@ -1,4 +1,6 @@
 import Movie from "../models/Movie.js";
+import Sala from "../models/Sala.js";
+import Seat from "../models/Seat.js";
 
 export const getPeliculas = async (req, res) => {
   try {
@@ -16,18 +18,46 @@ export const getPeliculas = async (req, res) => {
 
 export const addPelicula = async (req, res) => {
   try {
-    const { title, duration, genero } = req.body;
+    const { title, duration, genero, poster, salaNumber } = req.body;
 
-    if (!title || !duration || !genero) {
+    if (!title || !duration || !genero || !poster || !salaNumber) {
       return res.status(400).json({ error: "Faltan datos obligatorios" });
     }
 
+    // Crear la pelicula
     const nuevaPelicula = await Movie.create({
       title,
       duration: parseInt(duration),
       genero,
+      poster,
     });
-    res.status(201).json(nuevaPelicula);
+
+    // Crear la sala asociada
+    const sala = await Sala.create({
+      movieId: nuevaPelicula.id,
+      salaNumber,
+    });
+
+    // Crear los asientos para la sala
+    const filas = ["A", "B", "C", "D", "E"];
+    const asientosPorFila = 10;
+    const seats = [];
+    for (const fila of filas) {
+      for (let numero = 1; numero <= asientosPorFila; numero++) {
+        seats.push({
+          fila,
+          numero,
+          salaId: sala.id,
+        });
+      }
+    }
+    await Seat.bulkCreate(seats);
+
+    res.status(201).json({
+      pelicula: nuevaPelicula,
+      sala,
+      seatsCreados: seats.length,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Error interno del servidor" });
