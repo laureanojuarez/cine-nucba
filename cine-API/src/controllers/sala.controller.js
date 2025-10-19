@@ -29,10 +29,8 @@ export const addSala = async (req, res) => {
     }
 
     const sala = await Sala.create({
-      data: {
-        movieId,
-        salaNumber,
-      },
+      movieId,
+      salaNumber,
     });
 
     const filas = ["A", "B", "C", "D", "E"];
@@ -88,7 +86,7 @@ export const getSalaByMovieId = async (req, res) => {
 
     const salas = await Sala.findAll({
       where: { movieId: parseInt(id) },
-      include: { Seat: true },
+      include: [{ model: Seat }],
     });
     if (salas.length === 0) {
       return res.status(404).json({ error: "No hay salas para esta película" });

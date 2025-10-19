@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 type Seat = {
   id: number;
   fila: string;
@@ -10,8 +12,15 @@ type Props = {
 };
 
 export default function Seats({ seats }: Props) {
-  // Agrupar asientos por fila
+  const [selected, setSelected] = useState<number[]>([]);
   const filas = Array.from(new Set(seats.map((seat) => seat.fila))).sort();
+
+  const handleSelect = (id: number, disponible: boolean) => {
+    if (!disponible) return;
+    setSelected((prev) =>
+      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
+    );
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -24,16 +33,20 @@ export default function Seats({ seats }: Props) {
               .filter((seat) => seat.fila === fila)
               .sort((a, b) => a.numero - b.numero)
               .map((seat) => (
-                <span
+                <button
                   key={seat.id}
+                  onClick={() => handleSelect(seat.id, seat.disponible)}
                   className={`px-3 py-1 rounded border text-sm font-semibold transition-colors duration-200 ${
-                    seat.disponible
-                      ? "bg-teal-100 border-teal-300 text-teal-900 hover:bg-teal-200"
-                      : "bg-gray-300 border-gray-400 text-gray-500 line-through opacity-70"
+                    !seat.disponible
+                      ? "bg-gray-300 border-gray-400 text-gray-500 line-through opacity-70 cursor-not-allowed"
+                      : selected.includes(seat.id)
+                      ? "bg-blue-400 border-blue-600 text-white"
+                      : "bg-teal-100 border-teal-300 text-teal-900 hover:bg-teal-200"
                   }`}
+                  disabled={!seat.disponible}
                 >
                   {seat.numero}
-                </span>
+                </button>
               ))}
           </div>
         ))}
@@ -44,6 +57,9 @@ export default function Seats({ seats }: Props) {
         </span>
         <span className="px-2 py-1 bg-gray-300 border border-gray-400 rounded text-gray-500 line-through opacity-70">
           Ocupado
+        </span>
+        <span className="px-2 py-1 bg-blue-400 border border-blue-600 rounded text-white">
+          Seleccionado
         </span>
       </div>
     </div>

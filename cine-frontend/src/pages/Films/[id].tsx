@@ -93,10 +93,10 @@ export default function FilmDetail() {
                   </span>
                   <span className="text-sm text-green-400">
                     Asientos disponibles:{" "}
-                    {sala.Seat.filter((seat: any) => seat.disponible).length}
+                    {sala.Seats.filter((seat: any) => seat.disponible).length}
                   </span>
                 </div>
-                <Seats seats={sala.Seat} />
+                <Seats seats={sala.Seats} />
               </div>
             ))
           )}
