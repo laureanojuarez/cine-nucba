@@ -14,6 +14,8 @@ export default function FilmDetail() {
   const token = useAuth((state) => state.token);
   const user = useAuth((state) => state.user);
 
+  const API_URL = import.meta.env.VITE_BACKEND_URL;
+
   async function handleCheckout() {
     if (!user) return alert("Debes iniciar sesion");
     if (selectedSeats.length === 0)
@@ -24,7 +26,7 @@ export default function FilmDetail() {
 
     try {
       await axios.post(
-        "http://localhost:3000/reservas",
+        `${API_URL}/reservas`,
         {
           userId: user.id,
           salaId,
@@ -47,27 +49,27 @@ export default function FilmDetail() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-900 rounded-xl shadow-lg text-white">
+    <div className="max-w-5xl mx-auto p-6 rounded-xl shadow-lg text-white">
       <div className="flex flex-col md:flex-row gap-8 items-start">
-        <div className="md:w-1/3 w-full shrink-0">
-          <img
-            src={film.poster || "/placeholder.jpg"}
-            alt={film.title}
-            className="rounded-lg shadow-lg w-full h-96 object-cover mb-4"
-          />
-        </div>
-        <div className="md:w-2/3 w-full flex flex-col gap-4">
+        <div>
           <h1 className="text-4xl font-bold mb-2">{film.title}</h1>
-          <div className="flex items-center gap-4 mb-2">
+          <div className=" relative top-8">
             {film.duration && (
-              <span className="bg-gray-800 text-white text-xs px-2 py-1 rounded">
+              <span className=" text-white text-xs px-2 py-1 rounded">
                 {Math.floor(film.duration / 60)}h {film.duration % 60}m
               </span>
             )}
-            <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded">
-              {film.genero}
-            </span>
           </div>
+          <img
+            src={film.poster || "/placeholder.jpg"}
+            alt={film.title}
+            className="rounded-lg shadow-lg w-96  object-cover mb-4"
+          />
+          <span className="border text-white text-xl px-2 py-1 rounded">
+            {film.genero}
+          </span>
+        </div>
+        <div className="md:w-2/3 w-full flex flex-col gap-4">
           <div className="mb-4">
             <span className="font-semibold">Género:</span>{" "}
             {film.genero || "N/A"}

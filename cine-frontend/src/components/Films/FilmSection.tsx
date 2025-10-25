@@ -1,6 +1,6 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { FilmCard } from "./FilmCard";
+import {useEffect, useState} from "react";
+import {FilmCard} from "./FilmCard";
 
 export const FilmSection = () => {
   const [films, setFilms] = useState<any[]>([]);
@@ -18,9 +18,7 @@ export const FilmSection = () => {
   }, []);
 
   return (
-    <section className="flex flex-col gap-6 items-center">
-      <h1 className="font-bold text-4xl py-4">Peliculas en cartelera</h1>
-
+    <section className="flex flex-col gap-6 items-center p-4">
       {films.length === 0 ? (
         <div className="text-white text-xl">No hay peliculas disponibles</div>
       ) : (

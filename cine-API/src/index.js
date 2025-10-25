@@ -4,6 +4,8 @@ import peliculasRoutes from "./routes/peliculas.routes.js";
 import reservaRoutes from "./routes/reserva.routes.js";
 import salaRoutes from "./routes/sala.routes.js";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
 // Models
 import User from "./models/User.js";

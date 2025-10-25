@@ -1,8 +1,13 @@
 import express from "express";
-import {reservarPelicula} from "../controllers/reserva.controller.js";
+import {
+  getReservasByUser,
+  reservarPelicula,
+} from "../controllers/reserva.controller.js";
+import {verifyToken} from "../middlewares/verify.middleware.js";
 
 const router = express.Router();
 
 router.post("/", reservarPelicula);
+router.get("/mis-entradas", verifyToken, getReservasByUser);
 
 export default router;

@@ -6,7 +6,7 @@ import {
   getPeliculas,
   updatePelicula,
 } from "../controllers/peliculas.controller.js";
-import {verifyToken} from "../controllers/verify.controller.js";
+import {verifyToken} from "../middlewares/verify.middleware.js";
 
 const router = express.Router();
 

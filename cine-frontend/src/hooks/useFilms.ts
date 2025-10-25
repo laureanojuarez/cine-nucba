@@ -14,11 +14,13 @@ export function useFilm(id?: string) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const API_URL = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     if (!id) return;
     setLoading(true);
     axios
-      .get(`http://localhost:3000/peliculas/${id}`)
+      .get(`${API_URL}/peliculas/${id}`)
       .then((res) => setFilm(res.data))
       .catch(() => setError("No se pudo cargar la película"))
       .finally(() => setLoading(false));

@@ -6,9 +6,9 @@ import {
   type FormikErrors,
   type FormikHelpers,
 } from "formik";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
-import { useState } from "react";
+import {useState} from "react";
 
 interface RegisterValues {
   username: string;
@@ -21,14 +21,16 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  const API_URL = import.meta.env.VITE_BACKEND_URL;
+
   const handleSubmit = async (
     values: RegisterValues,
-    { setSubmitting }: FormikHelpers<RegisterValues>
+    {setSubmitting}: FormikHelpers<RegisterValues>
   ) => {
     setLoading(true);
     setError("");
     try {
-      await axios.post("http://localhost:3000/auth/register", {
+      await axios.post(`${API_URL}/auth/register`, {
         username: values.username,
         email: values.email,
         password: values.password,

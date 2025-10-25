@@ -11,18 +11,16 @@ export default function LoginPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  const API_URL = import.meta.env.VITE_BACKEND_URL;
+
   const handleSubmit = async (values: {email: string; password: string}) => {
     setLoading(true);
     setError("");
     try {
-      const {data} = await axios.post(
-        "http://localhost:3000/auth/login",
-        values
-      );
+      const {data} = await axios.post(`${API_URL}/auth/login`, values);
       setToken(data.token);
-      localStorage.setItem("token", data.token);
 
-      const userRes = await axios.get("http://localhost:3000/auth/me", {
+      const userRes = await axios.get(`${API_URL}/auth/me`, {
         headers: {
           Authorization: `Bearer ${data.token}`,
         },

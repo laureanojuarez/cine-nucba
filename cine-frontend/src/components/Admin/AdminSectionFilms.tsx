@@ -94,7 +94,7 @@ export const AdminSectionFilms: React.FC<AdminSectionFilmsProps> = ({
                   />
                   <button
                     type="submit"
-                    className="bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded hover:scale-105 transition font-semibold shadow"
+                    className="bg-linear-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded hover:scale-105 transition font-semibold shadow"
                   >
                     Guardar
                   </button>

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 interface FilmCardProps {
   film: {
@@ -9,10 +9,10 @@ interface FilmCardProps {
   };
 }
 
-export const FilmCard = ({ film }: FilmCardProps) => {
+export const FilmCard = ({film}: FilmCardProps) => {
   return (
     <Link
-      className="bg-stone-900 rounded-xl shadow-lg overflow-hidden border border-gray-700 flex flex-col"
+      className="bg-stone-900 rounded-xl shadow-lg overflow-hidden border border-gray-700 w-72 flex flex-col"
       to={`/films/${film.id}`}
     >
       <div className="relative">
