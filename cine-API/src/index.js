@@ -1,6 +1,7 @@
 import express from "express";
 import authRoutes from "./routes/auth.routes.js";
 import peliculasRoutes from "./routes/peliculas.routes.js";
+import reservaRoutes from "./routes/reserva.routes.js";
 import salaRoutes from "./routes/sala.routes.js";
 import cors from "cors";
 
@@ -20,31 +21,32 @@ app.use(express.json());
 app.use(cors());
 
 // Relations
-User.hasMany(Reserva, { foreignKey: "userId" });
-Reserva.belongsTo(User, { foreignKey: "userId" });
+User.hasMany(Reserva, {foreignKey: "userId"});
+Reserva.belongsTo(User, {foreignKey: "userId"});
 
-Movie.hasMany(Sala, { foreignKey: "movieId" });
-Sala.belongsTo(Movie, { foreignKey: "movieId" });
+Movie.hasMany(Sala, {foreignKey: "movieId"});
+Sala.belongsTo(Movie, {foreignKey: "movieId"});
 
-Sala.hasMany(Seat, { foreignKey: "salaId" });
-Seat.belongsTo(Sala, { foreignKey: "salaId" });
+Sala.hasMany(Seat, {foreignKey: "salaId"});
+Seat.belongsTo(Sala, {foreignKey: "salaId"});
 
-Sala.hasMany(Reserva, { foreignKey: "salaId" });
-Reserva.belongsTo(Sala, { foreignKey: "salaId" });
+Sala.hasMany(Reserva, {foreignKey: "salaId"});
+Reserva.belongsTo(Sala, {foreignKey: "salaId"});
 
-Seat.hasMany(Reserva, { foreignKey: "seatId" });
-Reserva.belongsTo(Seat, { foreignKey: "seatId" });
+Seat.hasMany(Reserva, {foreignKey: "seatId"});
+Reserva.belongsTo(Seat, {foreignKey: "seatId"});
 
 // Routes
 app.use("/auth", authRoutes);
 app.use("/peliculas", peliculasRoutes);
 app.use("/salas", salaRoutes);
+app.use("/reservas", reservaRoutes);
 
 try {
   await sequelize.authenticate();
   console.log("Connection has been established successfully.");
 
-  await sequelize.sync({ alter: true });
+  await sequelize.sync();
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });

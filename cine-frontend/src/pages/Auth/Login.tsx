@@ -1,47 +1,39 @@
-import { Link, useNavigate } from "react-router-dom";
-import {
-  Form,
-  Field,
-  ErrorMessage,
-  Formik,
-  type FormikHelpers,
-  type FormikErrors,
-} from "formik";
+import {Link, useNavigate} from "react-router-dom";
+import {Form, Field, Formik, ErrorMessage} from "formik";
 import axios from "axios";
-import { useState } from "react";
+import {useState} from "react";
+import {useAuth} from "../../store/auth";
 
 export default function LoginPage() {
-  interface LoginValues {
-    email: string;
-    password: string;
-  }
-
+  const setToken = useAuth((s) => s.setToken);
+  const setUser = useAuth((s) => s.setUser);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (
-    values: LoginValues,
-    { setSubmitting }: FormikHelpers<LoginValues>
-  ): Promise<void> => {
+  const handleSubmit = async (values: {email: string; password: string}) => {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.post("http://localhost:3000/auth/login", {
-        email: values.email,
-        password: values.password,
-      });
+      const {data} = await axios.post(
+        "http://localhost:3000/auth/login",
+        values
+      );
+      setToken(data.token);
+      localStorage.setItem("token", data.token);
 
-      const tokenToStore = res.data && ((res.data.token ?? res.data) as string);
-      localStorage.setItem("token", tokenToStore);
+      const userRes = await axios.get("http://localhost:3000/auth/me", {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+        },
+      });
+      setUser(userRes.data);
+
       navigate("/");
     } catch (err: any) {
-      const msg = err?.response?.data?.message || "Error de red";
-      setError(msg);
-      console.error("Login error:", err, msg);
+      setError(err.response.data.message || "Error de login");
     } finally {
       setLoading(false);
-      setSubmitting(false);
     }
   };
 
@@ -57,16 +49,14 @@ export default function LoginPage() {
       <h1>Buenas!, que bueno verte por aca</h1>
       <div className="w-96">
         <Formik
-          initialValues={{ email: "", password: "" } as LoginValues}
-          validate={(values: LoginValues) => {
-            const errors: FormikErrors<LoginValues> = {};
-            if (!values.email) errors.email = "Requerido";
-            else if (
-              !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-            )
-              errors.email = "Email invalido";
-            if (!values.password) errors.password = "Requerido";
-            else if (values.password.length < 6)
+          initialValues={{email: "", password: ""}}
+          validate={({email, password}) => {
+            const errors: any = {};
+            if (!email) errors.email = "Requerido";
+            else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email))
+              errors.email = "Email inválido";
+            if (!password) errors.password = "Requerido";
+            else if (password.length < 6)
               errors.password =
                 "La contraseña debe tener al menos 6 caracteres";
             return errors;

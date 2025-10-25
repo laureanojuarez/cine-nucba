@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 
 interface Film {
-  id: string;
+  id: number;
   title: string;
   genero: string;
   duration: number;
@@ -24,5 +24,30 @@ export function useFilm(id?: string) {
       .finally(() => setLoading(false));
   }, [id]);
 
-  return { film, loading, error };
+  return {film, loading, error};
 }
+
+export const useFilms = () => {
+  const [films, setFilms] = useState<Film[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchFilms = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await axios.get("http://localhost:3000/peliculas");
+      setFilms(res.data);
+    } catch {
+      setError("No se pudieron cargar las películas");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchFilms();
+  }, [fetchFilms]);
+
+  return {films, loading, error, refetch: fetchFilms};
+};

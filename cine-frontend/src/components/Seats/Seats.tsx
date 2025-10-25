@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 type Seat = {
   id: number;
   fila: string;
@@ -9,16 +7,19 @@ type Seat = {
 
 type Props = {
   seats: Seat[];
+  selectedSeats: number[];
+  setSelectedSeats: (seats: number[]) => void;
 };
 
-export default function Seats({ seats }: Props) {
-  const [selected, setSelected] = useState<number[]>([]);
+export default function Seats({seats, selectedSeats, setSelectedSeats}: Props) {
   const filas = Array.from(new Set(seats.map((seat) => seat.fila))).sort();
 
   const handleSelect = (id: number, disponible: boolean) => {
     if (!disponible) return;
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
+    setSelectedSeats(
+      selectedSeats.includes(id)
+        ? selectedSeats.filter((sid) => sid !== id)
+        : [...selectedSeats, id]
     );
   };
 
@@ -39,7 +40,7 @@ export default function Seats({ seats }: Props) {
                   className={`px-3 py-1 rounded border text-sm font-semibold transition-colors duration-200 ${
                     !seat.disponible
                       ? "bg-gray-300 border-gray-400 text-gray-500 line-through opacity-70 cursor-not-allowed"
-                      : selected.includes(seat.id)
+                      : selectedSeats.includes(seat.id)
                       ? "bg-blue-400 border-blue-600 text-white"
                       : "bg-teal-100 border-teal-300 text-teal-900 hover:bg-teal-200"
                   }`}

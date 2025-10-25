@@ -1,16 +1,45 @@
-import { Link, useParams } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import Seats from "../../components/Seats/Seats";
-import { useFilm } from "../../hooks/useFilms";
-import { useSalas } from "../../hooks/useSalas";
+import {useFilm} from "../../hooks/useFilms";
+import {useSalas} from "../../hooks/useSalas";
+import {useAuth} from "../../store/auth";
+import {useState} from "react";
+import axios from "axios";
 
 export default function FilmDetail() {
-  const { id } = useParams<{ id: string }>();
-  const { film } = useFilm(id);
-  const { salas } = useSalas(id);
-  const token = localStorage.getItem("token");
+  const {id} = useParams<{id: string}>();
+  const {film} = useFilm(id);
+  const {salas} = useSalas(id);
+  const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
+  const token = useAuth((state) => state.token);
+  const user = useAuth((state) => state.user);
 
   async function handleCheckout() {
-    console.log("Iniciando proceso de compra...");
+    if (!user) return alert("Debes iniciar sesion");
+    if (selectedSeats.length === 0)
+      return alert("Debes seleccionar al menos un asiento");
+
+    const salaId = salas[0]?.id;
+    if (!salaId) return alert("No hay sala disponible para esta película");
+
+    try {
+      await axios.post(
+        "http://localhost:3000/reservas",
+        {
+          userId: user.id,
+          salaId,
+          seatIds: selectedSeats,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert("Reserva realizada con éxito");
+    } catch (error) {
+      alert("Error al realizar la reserva");
+    }
   }
 
   if (!film) {
@@ -20,7 +49,7 @@ export default function FilmDetail() {
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-900 rounded-xl shadow-lg text-white">
       <div className="flex flex-col md:flex-row gap-8 items-start">
-        <div className="md:w-1/3 w-full flex-shrink-0">
+        <div className="md:w-1/3 w-full shrink-0">
           <img
             src={film.poster || "/placeholder.jpg"}
             alt={film.title}
@@ -62,7 +91,11 @@ export default function FilmDetail() {
                     {sala.Seats.filter((seat: any) => seat.disponible).length}
                   </span>
                 </div>
-                <Seats seats={sala.Seats} />
+                <Seats
+                  seats={sala.Seats}
+                  selectedSeats={selectedSeats}
+                  setSelectedSeats={setSelectedSeats}
+                />
               </div>
             ))
           )}

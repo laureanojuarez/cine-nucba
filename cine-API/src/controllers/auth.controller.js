@@ -1,10 +1,15 @@
-import { validateLoginUser } from "../helpers/validations.js";
+import {validateLoginUser} from "../helpers/validations.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 export const registerUser = async (req, res) => {
-  const { username, email, password } = req.body;
+  const {username, email, password} = req.body;
+
+  const result = validateLoginUser({email, password});
+  if (result.error) {
+    return res.status(400).json({message: result.message});
+  }
 
   const user = await User.findOne({
     where: {
@@ -13,11 +18,10 @@ export const registerUser = async (req, res) => {
   });
 
   if (user) {
-    return res.status(400).json({ message: "User already exists" });
+    return res.status(400).json({message: "User already exists"});
   }
 
   const saltRounds = 10;
-
   const salt = await bcrypt.genSalt(saltRounds);
   const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -34,10 +38,10 @@ export const loginUser = async (req, res) => {
   const result = validateLoginUser(req.body);
 
   if (result.error) {
-    return res.status(400).json({ message: result.message });
+    return res.status(400).json({message: result.message});
   }
 
-  const { email, password } = req.body;
+  const {email, password} = req.body;
 
   const user = await User.findOne({
     where: {
@@ -46,21 +50,21 @@ export const loginUser = async (req, res) => {
   });
 
   if (!user) {
-    return res.status(400).json({ message: "Usuario o contraseña inválidos" });
+    return res.status(400).json({message: "Usuario o contraseña inválidos"});
   }
 
   const comparison = await bcrypt.compare(password, user.password);
 
   if (!comparison) {
-    return res.status(400).json({ message: "Email y/o contraseña incorrecta" });
+    return res.status(400).json({message: "Email y/o contraseña incorrecta"});
   }
 
   const secretKey = "laureanojuarez";
 
-  const payload = { id: user.id, email: user.email };
-  const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
+  const payload = {id: user.id, email: user.email};
+  const token = jwt.sign(payload, secretKey, {expiresIn: "1h"});
 
-  res.json({ token });
+  res.json({token});
 };
 
 export const getCurrentUser = async (req, res) => {
@@ -69,9 +73,9 @@ export const getCurrentUser = async (req, res) => {
     const user = await User.findByPk(userId, {
       attributes: ["id", "username", "email", "role"],
     });
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) return res.status(404).json({message: "User not found"});
     res.json(user);
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({message: "Server error"});
   }
 };
