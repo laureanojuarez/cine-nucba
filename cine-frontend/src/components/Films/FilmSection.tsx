@@ -18,13 +18,18 @@ export const FilmSection = () => {
   }, []);
 
   return (
-    <section className="flex flex-col gap-6 items-center p-4">
+    <section className="flex flex-col gap-6 items-center p-4 ">
+      <h1 className="font-bold text-4xl py-4 text-white">
+        Peliculas en cartelera
+      </h1>
       {films.length === 0 ? (
         <div className="text-white text-xl">No hay peliculas disponibles</div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 w-full max-w-5xl">
           {films.map((f) => (
-            <FilmCard key={f.id} film={f} />
+            <section className="p-4">
+              <FilmCard key={f.id} film={f} />
+            </section>
           ))}
         </div>
       )}

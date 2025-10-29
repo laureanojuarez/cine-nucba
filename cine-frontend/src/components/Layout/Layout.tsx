@@ -11,7 +11,7 @@ const Layout = () => {
   }, [pathname]);
 
   return (
-    <div className="layout">
+    <div className="layout bg-stone-900">
       <Header />
       <main>
         <Outlet />

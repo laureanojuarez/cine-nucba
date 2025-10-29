@@ -1,31 +1,34 @@
-import {User} from "lucide-react";
-import logo_cine_rosario from "/images/logo_cine_rosario.png";
-import {Link, useNavigate} from "react-router-dom";
+import {Menu, User, UserCog} from "lucide-react";
+import logo_cine from "/images/cinerio.svg";
+import {Link} from "react-router-dom";
 import {useAuth} from "../../store/auth";
+import {ProfileTab} from "../Tab/ProfileTab";
+import {useEffect, useRef, useState} from "react";
 
 export const Header = () => {
   const token = useAuth((state) => state.token);
   const user = useAuth((state) => state.user);
-  const logout = useAuth((state) => state.logout);
-  const navigate = useNavigate();
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
+  const handleToggleProfile = () => {
+    setIsProfileOpen((v) => !v);
   };
 
+  useEffect(() => {
+    if (!token) {
+      setIsProfileOpen(false);
+    }
+  }, [token]);
+
   return (
-    <div className="w-full sticky top-0 z-50 bg-neutral-900/80 backdrop-blur border-b border-neutral-700 shadow-sm">
+    <div className="w-full sticky top-0 z-50 backdrop-blur border-b border-neutral-900/80 shadow-sm">
       <header className="h-16 flex items-center justify-between max-w-6xl mx-auto px-4">
+        <Menu className="md:hidden text-white" />
         <Link to="/" className="flex items-center gap-2">
-          <img
-            src={logo_cine_rosario}
-            alt="Cine Rosario"
-            className="h-10 w-auto md:h-12"
-          />
+          <img src={logo_cine} alt="Cine Rosario" className="w-32" />
         </Link>
 
-        <nav className="flex items-center gap-4">
+        <nav className="hidden md:flex items-center gap-4">
           <Link
             to="/"
             className="text-white hover:text-green-400 font-semibold transition"
@@ -36,7 +39,6 @@ export const Header = () => {
             to="/dashboard"
             className="flex items-center gap-1 text-white hover:text-green-400 transition"
           >
-            <User size={20} />
             {token && user && (
               <span className="hidden sm:inline text-sm font-medium">
                 {user.username}
@@ -44,21 +46,43 @@ export const Header = () => {
             )}
           </Link>
           {token ? (
-            <button
-              onClick={handleLogout}
-              className="ml-2 px-3 py-1 rounded bg-red-600 hover:bg-red-700 text-white font-semibold transition"
-            >
-              Logout
-            </button>
+            <div className="relative">
+              <UserCog onClick={handleToggleProfile} cursor={"pointer"} />
+              {isProfileOpen && (
+                <div className="absolute right-0 mt-2 z-50">
+                  <ProfileTab onClose={() => setIsProfileOpen(false)} />
+                </div>
+              )}
+            </div>
           ) : (
             <Link
               to="/login"
-              className="ml-2 px-3 py-1 rounded bg-green-600 hover:bg-green-700 text-white font-semibold transition"
+              className="ml-2 px-3 py-1 rounded bg-green-600 hover:bg-green-700 text-white font-semibold transition flex items-center gap-1"
             >
-              Iniciar Sesión
+              <User size={18} />
+              Iniciar sesión
             </Link>
           )}
         </nav>
+
+        {/* Mobile */}
+        {token ? (
+          <div className="md:hidden relative">
+            <User
+              onClick={handleToggleProfile}
+              className="cursor-pointer text-white"
+            />
+            {isProfileOpen && (
+              <div className="absolute right-0 top-8 z-50">
+                <ProfileTab onClose={() => setIsProfileOpen(false)} />
+              </div>
+            )}
+          </div>
+        ) : (
+          <Link to="/login" className="md:hidden text-white">
+            <User />
+          </Link>
+        )}
       </header>
     </div>
   );
