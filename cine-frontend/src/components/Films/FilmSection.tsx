@@ -27,9 +27,7 @@ export const FilmSection = () => {
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 w-full max-w-5xl">
           {films.map((f) => (
-            <section className="p-4">
-              <FilmCard key={f.id} film={f} />
-            </section>
+            <FilmCard key={f.id} film={f} />
           ))}
         </div>
       )}
