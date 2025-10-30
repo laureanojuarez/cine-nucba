@@ -1,7 +1,5 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import LoginPage from "./pages/Auth/Login";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Home from "./pages/Home/Home";
-import RegisterPage from "./pages/Auth/Register";
 import FilmDetail from "./pages/Films/[id]";
 import Layout from "./components/Layout/Layout";
 import Protected from "./routes/Protected";
@@ -14,8 +12,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
           <Route path="films/:id" element={<FilmDetail />} />
           <Route element={<Protected />}>
             <Route path="dashboard" element={<Dashboard />} />

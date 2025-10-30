@@ -3,9 +3,15 @@ import logo_cine from "/images/cinerio.svg";
 import {Link} from "react-router-dom";
 import {useAuth} from "../../store/auth";
 import {ProfileTab} from "../Tab/ProfileTab";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 
-export const Header = () => {
+interface HeaderProps {
+  onOpenLogin: () => void;
+  onOpenRegister: () => void;
+  onOpenProfile: () => void;
+}
+
+export const Header = ({onOpenLogin, onOpenProfile}: HeaderProps) => {
   const token = useAuth((state) => state.token);
   const user = useAuth((state) => state.user);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -15,9 +21,7 @@ export const Header = () => {
   };
 
   useEffect(() => {
-    if (!token) {
-      setIsProfileOpen(false);
-    }
+    if (!token) setIsProfileOpen(false);
   }, [token]);
 
   return (
@@ -46,42 +50,23 @@ export const Header = () => {
             )}
           </Link>
           {token ? (
-            <div className="relative">
-              <UserCog onClick={handleToggleProfile} cursor={"pointer"} />
-              {isProfileOpen && (
-                <div className="absolute right-0 mt-2 z-50">
-                  <ProfileTab onClose={() => setIsProfileOpen(false)} />
-                </div>
-              )}
-            </div>
+            <UserCog onClick={onOpenProfile} className="cursor-pointer" />
           ) : (
-            <Link
-              to="/login"
-              className="ml-2 px-3 py-1 rounded bg-green-600 hover:bg-green-700 text-white font-semibold transition flex items-center gap-1"
-            >
-              <User size={18} />
-              Iniciar sesión
-            </Link>
+            <User size={18} onClick={onOpenLogin} className="cursor-pointer" />
           )}
         </nav>
 
         {/* Mobile */}
         {token ? (
-          <div className="md:hidden relative">
-            <User
-              onClick={handleToggleProfile}
-              className="cursor-pointer text-white"
-            />
-            {isProfileOpen && (
-              <div className="absolute right-0 top-8 z-50">
-                <ProfileTab onClose={() => setIsProfileOpen(false)} />
-              </div>
-            )}
-          </div>
+          <User
+            onClick={onOpenProfile}
+            className="md:hidden cursor-pointer text-white"
+          />
         ) : (
-          <Link to="/login" className="md:hidden text-white">
-            <User />
-          </Link>
+          <User
+            onClick={onOpenLogin}
+            className="md:hidden cursor-pointer text-white"
+          />
         )}
       </header>
     </div>

@@ -12,9 +12,8 @@ export const ProfileTab = ({onClose}: ProfileTabProps) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log("hola");
-    onClose();
     logout();
+    onClose();
     navigate("/", {replace: true});
   };
 
@@ -24,38 +23,39 @@ export const ProfileTab = ({onClose}: ProfileTabProps) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-2xl p-4 w-56 border border-gray-200 text-black">
-      <div className="flex items-center gap-2 mb-3 pb-3 border-b border-gray-200">
-        <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-bold">
+    <div className="w-80 mx-auto">
+      <div className="text-center mb-6">
+        <div className="w-20 h-20 mx-auto rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-3xl mb-3">
           {user?.username?.charAt(0).toUpperCase()}
         </div>
-        <div>
-          <h2 className="font-semibold text-sm">{user?.username}</h2>
-          <div className="text-xs text-gray-500">{user?.email}</div>
-        </div>
+        <h2 className="text-xl font-bold">{user?.username}</h2>
+        <p className="text-sm text-gray-600">{user?.email}</p>
       </div>
-      <div className="space-y-2">
+
+      <div className="flex flex-col gap-3">
         <button
           onClick={() => handleNavigate("/dashboard")}
-          className="w-full flex items-center gap-2 text-left px-2 py-2 rounded hover:bg-gray-100 transition text-sm"
+          className="flex items-center gap-3 px-4 py-3 rounded-md border border-gray-300 hover:bg-gray-50 transition text-left"
         >
-          <User size={16} />
-          Mi perfil
+          <User size={20} />
+          <span className="font-medium">Mi perfil</span>
         </button>
+
         {user?.role === "admin" && (
           <button
             onClick={() => handleNavigate("/admin")}
-            className="w-full flex items-center gap-2 text-left px-2 py-2 rounded hover:bg-gray-100 transition text-sm"
+            className="flex items-center gap-3 px-4 py-3 rounded-md border border-gray-300 hover:bg-gray-50 transition text-left"
           >
-            <Settings size={16} />
-            Panel Admin
+            <Settings size={20} />
+            <span className="font-medium">Panel Admin</span>
           </button>
         )}
+
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-2 bg-red-600 text-white py-2 px-2 rounded hover:bg-red-700 transition text-sm font-semibold"
+          className="flex items-center justify-center gap-3 px-4 py-3 rounded-md bg-red-600 text-white hover:bg-red-700 transition font-semibold mt-2"
         >
-          <LogOut size={16} />
+          <LogOut size={20} />
           Cerrar sesión
         </button>
       </div>
