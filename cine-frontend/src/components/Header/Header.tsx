@@ -2,8 +2,6 @@ import {Menu, User, UserCog} from "lucide-react";
 import logo_cine from "/images/cinerio.svg";
 import {Link} from "react-router-dom";
 import {useAuth} from "../../store/auth";
-import {ProfileTab} from "../Tab/ProfileTab";
-import {useEffect, useState} from "react";
 
 interface HeaderProps {
   onOpenLogin: () => void;
@@ -14,15 +12,6 @@ interface HeaderProps {
 export const Header = ({onOpenLogin, onOpenProfile}: HeaderProps) => {
   const token = useAuth((state) => state.token);
   const user = useAuth((state) => state.user);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-
-  const handleToggleProfile = () => {
-    setIsProfileOpen((v) => !v);
-  };
-
-  useEffect(() => {
-    if (!token) setIsProfileOpen(false);
-  }, [token]);
 
   return (
     <div className="w-full sticky top-0 z-50 backdrop-blur border-b border-neutral-900/80 shadow-sm">
