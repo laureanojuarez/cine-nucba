@@ -1,14 +1,16 @@
 import {useEffect, useState} from "react";
-import {Header} from "../Header/Header";
-import {Footer} from "../Footer/Footer";
 import {Outlet, useLocation} from "react-router-dom";
+import {Header} from "../Header/Header";
 import {SideTab} from "../Tab/SideTab";
 import {Login} from "../Auth/Login";
 import {Register} from "../Auth/Register";
 import {ProfileTab} from "../Tab/ProfileTab";
+import {useAuth} from "../../store/auth";
+import {Footer} from "../Footer/Footer";
 
 const Layout = () => {
   const {pathname} = useLocation();
+  const token = useAuth((s) => s.token);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -17,13 +19,18 @@ const Layout = () => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
+  useEffect(() => {
+    if (!token) setIsProfileOpen(false);
+  }, [token]);
+
   return (
-    <div className="layout bg-stone-900">
+    <div className="min-h-screen bg-neutral-900">
       <Header
         onOpenLogin={() => setIsLoginOpen(true)}
         onOpenRegister={() => setIsRegisterOpen(true)}
         onOpenProfile={() => setIsProfileOpen(true)}
       />
+
       <main>
         <Outlet />
       </main>
@@ -31,68 +38,50 @@ const Layout = () => {
 
       {/* Tabs laterales */}
       <SideTab open={isLoginOpen} onClose={() => setIsLoginOpen(false)}>
-        <LoginTabContent
-          onRegister={() => {
+        <Login
+          onSuccess={() => {
             setIsLoginOpen(false);
-            setIsRegisterOpen(true);
           }}
-          onSuccess={() => setIsLoginOpen(false)}
         />
+        <div className="mt-4 text-center">
+          ¿No tienes cuenta?{" "}
+          <button
+            className="text-blue-600 underline"
+            onClick={() => {
+              setIsLoginOpen(false);
+              setIsRegisterOpen(true);
+            }}
+          >
+            Registrate
+          </button>
+        </div>
       </SideTab>
+
       <SideTab open={isRegisterOpen} onClose={() => setIsRegisterOpen(false)}>
-        <RegisterTabContent
-          onLogin={() => {
+        <Register
+          onSuccess={() => {
             setIsRegisterOpen(false);
-            setIsLoginOpen(true);
           }}
-          onSuccess={() => setIsRegisterOpen(false)}
         />
+        <div className="mt-4 text-center">
+          ¿Ya tienes cuenta?{" "}
+          <button
+            className="text-blue-600 underline"
+            onClick={() => {
+              setIsRegisterOpen(false);
+              setIsLoginOpen(true);
+            }}
+          >
+            Inicia sesión
+          </button>
+        </div>
       </SideTab>
+
       <SideTab open={isProfileOpen} onClose={() => setIsProfileOpen(false)}>
         <ProfileTab onClose={() => setIsProfileOpen(false)} />
       </SideTab>
     </div>
   );
 };
-
-function LoginTabContent({
-  onRegister,
-  onSuccess,
-}: {
-  onRegister: () => void;
-  onSuccess: () => void;
-}) {
-  return (
-    <div>
-      <Login onSuccess={onSuccess} />
-      <div className="mt-4 text-center">
-        ¿No tienes cuenta?{" "}
-        <button className="text-blue-500 underline" onClick={onRegister}>
-          Registrate
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function RegisterTabContent({
-  onLogin,
-  onSuccess,
-}: {
-  onLogin: () => void;
-  onSuccess: () => void;
-}) {
-  return (
-    <div>
-      <Register onSuccess={onSuccess} />
-      <div className="mt-4 text-center">
-        ¿Ya tienes cuenta?{" "}
-        <button className="text-blue-500 underline" onClick={onLogin}>
-          Inicia sesión
-        </button>
-      </div>
-    </div>
-  );
-}
 
 export default Layout;

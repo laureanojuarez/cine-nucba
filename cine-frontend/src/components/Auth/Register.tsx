@@ -1,14 +1,7 @@
-import {
-  ErrorMessage,
-  Field,
-  Form,
-  Formik,
-  type FormikErrors,
-  type FormikHelpers,
-} from "formik";
-import {useNavigate} from "react-router-dom";
+import {Form, Field, Formik, ErrorMessage, type FormikHelpers} from "formik";
 import axios from "axios";
 import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 interface RegisterValues {
   username: string;
@@ -16,11 +9,10 @@ interface RegisterValues {
   password: string;
 }
 
-export const Register = ({onSuccess}: {onSuccess: () => void}) => {
-  const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+export const Register = ({onSuccess}: {onSuccess?: () => void}) => {
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   const API_URL = import.meta.env.VITE_BACKEND_URL;
 
   const handleSubmit = async (
@@ -30,17 +22,11 @@ export const Register = ({onSuccess}: {onSuccess: () => void}) => {
     setLoading(true);
     setError("");
     try {
-      await axios.post(`${API_URL}/auth/register`, {
-        username: values.username,
-        email: values.email,
-        password: values.password,
-      });
-      console.log("Usuario creado exitosamente");
-      onSuccess();
+      await axios.post(`${API_URL}/auth/register`, values);
+      onSuccess?.();
       navigate("/");
-    } catch (err) {
-      setError("Error al registrar usuario");
-      console.error("Error en el registro", err);
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Error al registrar usuario");
     } finally {
       setLoading(false);
       setSubmitting(false);
@@ -52,45 +38,13 @@ export const Register = ({onSuccess}: {onSuccess: () => void}) => {
       {error && (
         <div className="bg-red-500 text-white p-2 mb-4 rounded-md">{error}</div>
       )}
-
       <h1 className="text-2xl font-bold mb-6 text-center">Registrarse</h1>
-
       <Formik
-        initialValues={{
-          username: "",
-          email: "",
-          password: "",
-        }}
-        validate={(values: RegisterValues) => {
-          const errors: FormikErrors<RegisterValues> = {};
-
-          if (!values.username) {
-            errors.username = "Nombre requerido";
-          } else if (values.username.length < 2) {
-            errors.username = "Nombre muy corto";
-          }
-
-          if (!values.email) {
-            errors.email = "Email requerido";
-          } else if (
-            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-          ) {
-            errors.email = "Email inválido";
-          }
-
-          if (!values.password) {
-            errors.password = "Contraseña requerida";
-          } else if (values.password.length < 6) {
-            errors.password = "La contraseña debe tener al menos 6 caracteres";
-          }
-
-          return errors;
-        }}
+        initialValues={{username: "", email: "", password: ""}}
         onSubmit={handleSubmit}
       >
-        <Form className="flex flex-col gap-4 w-full" noValidate>
+        <Form className="flex flex-col gap-4">
           <Field
-            type="text"
             name="username"
             placeholder="Nombre de usuario"
             className="p-2 border rounded-md"
@@ -100,7 +54,6 @@ export const Register = ({onSuccess}: {onSuccess: () => void}) => {
             component="div"
             className="text-red-500 text-sm"
           />
-
           <Field
             type="email"
             name="email"
@@ -112,7 +65,6 @@ export const Register = ({onSuccess}: {onSuccess: () => void}) => {
             component="div"
             className="text-red-500 text-sm"
           />
-
           <Field
             type="password"
             name="password"
@@ -124,7 +76,6 @@ export const Register = ({onSuccess}: {onSuccess: () => void}) => {
             component="div"
             className="text-red-500 text-sm"
           />
-
           <button
             type="submit"
             disabled={loading}

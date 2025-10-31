@@ -4,21 +4,22 @@ import {FilmCard} from "./FilmCard";
 
 export const FilmSection = () => {
   const [films, setFilms] = useState<any[]>([]);
+  const API_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchFilms = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/peliculas");
-        setFilms(response.data);
+        const {data} = await axios.get(`${API_URL}/peliculas`);
+        setFilms(data);
       } catch (error) {
         console.error("Error fetching films:", error);
       }
     };
     fetchFilms();
-  }, []);
+  }, [API_URL]);
 
   return (
-    <section className="flex flex-col gap-6 items-center p-4 ">
+    <section className="flex flex-col gap-6 items-center p-4">
       <h1 className="font-bold text-4xl py-4 text-white">
         Peliculas en cartelera
       </h1>

@@ -7,19 +7,19 @@ interface ProfileTabProps {
 }
 
 export const ProfileTab = ({onClose}: ProfileTabProps) => {
-  const user = useAuth((state) => state.user);
-  const logout = useAuth((state) => state.logout);
+  const user = useAuth((s) => s.user);
+  const logout = useAuth((s) => s.logout);
   const navigate = useNavigate();
+
+  const handleNavigate = (path: string) => {
+    onClose();
+    navigate(path);
+  };
 
   const handleLogout = () => {
     logout();
     onClose();
     navigate("/", {replace: true});
-  };
-
-  const handleNavigate = (path: string) => {
-    onClose();
-    navigate(path);
   };
 
   return (

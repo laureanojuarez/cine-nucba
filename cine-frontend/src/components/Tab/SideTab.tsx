@@ -23,16 +23,17 @@ export const SideTab = ({
           open ? "translate-x-0" : "translate-x-full"
         }`}
         style={{maxWidth: "100vw"}}
+        role="dialog"
+        aria-modal="true"
       >
         <button
           className="absolute top-4 right-4 text-gray-500 hover:text-black text-2xl"
           onClick={onClose}
+          aria-label="Cerrar"
         >
           ✕
         </button>
-        <div className="p-6 pt-16 h-full overflow-y-auto flex flex-col justify-center">
-          {children}
-        </div>
+        <div className="p-6 pt-16 h-full overflow-y-auto">{children}</div>
       </div>
     </>
   );
