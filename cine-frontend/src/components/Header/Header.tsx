@@ -35,13 +35,19 @@ export const Header = ({onOpenLogin, onOpenProfile}: HeaderProps) => {
             Soporte
           </Link>
           {token ? (
-            <button
-              className="text-white hover:text-green-400"
-              onClick={onOpenProfile}
-              title={user?.username}
-            >
-              <UserCog />
-            </button>
+            <>
+              <Link to="/dashboard" className="text-white">
+                Mis entradas
+              </Link>
+
+              <button
+                className="text-white hover:text-green-400"
+                onClick={onOpenProfile}
+                title={user?.username}
+              >
+                <UserCog />
+              </button>
+            </>
           ) : (
             <button
               className="text-white hover:text-green-400"

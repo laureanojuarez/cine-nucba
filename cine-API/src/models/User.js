@@ -1,11 +1,15 @@
-import { DataTypes } from "sequelize";
+import {DataTypes} from "sequelize";
 import sequelize from "../db.js";
 
 const User = sequelize.define("User", {
-  username: { type: DataTypes.STRING, unique: true, allowNull: false },
-  email: { type: DataTypes.STRING, unique: true, allowNull: false },
-  role: { type: DataTypes.STRING, defaultValue: "user" },
-  password: { type: DataTypes.STRING, allowNull: false },
+  email: {type: DataTypes.STRING, unique: true, allowNull: false},
+  password: {type: DataTypes.STRING, allowNull: false},
+  nombre: {type: DataTypes.STRING, allowNull: true},
+  apellido: {type: DataTypes.STRING, allowNull: true},
+  fechaNacimiento: {type: DataTypes.DATE, allowNull: true},
+  telefono: {type: DataTypes.STRING, allowNull: true},
+  genero: {type: DataTypes.STRING, allowNull: true},
+  role: {type: DataTypes.STRING, defaultValue: "user"},
 });
 
 export default User;

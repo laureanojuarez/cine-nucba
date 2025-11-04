@@ -1,4 +1,3 @@
-import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Home from "./pages/Home/Home";
 import FilmDetail from "./pages/Films/[id]";
 import Layout from "./components/Layout/Layout";
@@ -6,6 +5,7 @@ import Protected from "./routes/Protected";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Admin from "./pages/Admin/Admin";
 import Support from "./pages/Support/Support";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 function App() {
   return (

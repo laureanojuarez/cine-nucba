@@ -11,7 +11,7 @@ export const SideTab = ({
   open,
   onClose,
   children,
-  width = "w-96",
+  width = "w-104",
 }: SideTabProps) => {
   return (
     <>
@@ -19,7 +19,7 @@ export const SideTab = ({
         <div className="fixed inset-0 bg-black/40 z-40" onClick={onClose} />
       )}
       <div
-        className={`fixed top-0 right-0 h-full bg-white z-50 shadow-2xl transition-transform duration-300 ease-in-out ${width} ${
+        className={`fixed top-0 right-0 h-full bg-neutral-900 z-50 shadow-2xl transition-transform duration-300 ease-in-out ${width} ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
         style={{maxWidth: "100vw"}}

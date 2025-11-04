@@ -5,7 +5,6 @@ import {useNavigate} from "react-router-dom";
 import * as yup from "yup";
 
 interface RegisterValues {
-  username: string;
   email: string;
   password: string;
 }
@@ -17,7 +16,6 @@ export const Register = ({onSuccess}: {onSuccess?: () => void}) => {
   const API_URL = import.meta.env.VITE_BACKEND_URL;
 
   const validationSchema = yup.object().shape({
-    username: yup.string().required("El nombre de usuario es obligatorio"),
     email: yup
       .string()
       .email("Email inválido")
@@ -50,7 +48,7 @@ export const Register = ({onSuccess}: {onSuccess?: () => void}) => {
       )}
       <h1 className="text-2xl font-bold mb-6 text-center">Registrarse</h1>
       <Formik
-        initialValues={{username: "", email: "", password: ""}}
+        initialValues={{email: "", password: ""}}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
         validateOnBlur
@@ -58,25 +56,6 @@ export const Register = ({onSuccess}: {onSuccess?: () => void}) => {
       >
         {({errors, touched}) => (
           <Form className="flex flex-col gap-4" noValidate>
-            <Field
-              id="username"
-              name="username"
-              placeholder="Nombre de usuario"
-              aria-invalid={Boolean(touched.username && errors.username)}
-              aria-describedby="username-error"
-              className={`p-2 border rounded-md ${
-                touched.username && errors.username
-                  ? "border-red-500"
-                  : "border-gray-300"
-              }`}
-            />
-            <ErrorMessage
-              name="username"
-              component="div"
-              id="username-error"
-              aria-live="polite"
-              className="text-red-500 text-sm"
-            />
             <Field
               id="email"
               type="email"

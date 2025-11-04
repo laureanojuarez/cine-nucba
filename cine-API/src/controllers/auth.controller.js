@@ -4,34 +4,42 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 export const registerUser = async (req, res) => {
-  const {username, email, password} = req.body;
+  try {
+    const {email, password} = req.body;
 
-  const result = validateLoginUser({email, password});
-  if (result.error) {
-    return res.status(400).json({message: result.message});
-  }
+    if (!email || !password) {
+      return res.status(400).json({message: "All fields are required"});
+    }
 
-  const user = await User.findOne({
-    where: {
+    const result = validateLoginUser({email, password});
+    if (result.error) {
+      return res.status(400).json({message: result.message});
+    }
+
+    const user = await User.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (user) {
+      return res.status(400).json({message: "User already exists"});
+    }
+
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = await User.create({
       email,
-    },
-  });
+      password: hashedPassword,
+    });
 
-  if (user) {
-    return res.status(400).json({message: "User already exists"});
+    res.json(newUser.id);
+  } catch (error) {
+    console.error("Registration error:", error);
+    res.status(500).json({error: error.message});
   }
-
-  const saltRounds = 10;
-  const salt = await bcrypt.genSalt(saltRounds);
-  const hashedPassword = await bcrypt.hash(password, salt);
-
-  const newUser = await User.create({
-    username,
-    email,
-    password: hashedPassword,
-  });
-
-  res.json(newUser.id);
 };
 
 export const loginUser = async (req, res) => {
@@ -82,7 +90,15 @@ export const getCurrentUser = async (req, res) => {
   const userId = req.user.id;
   try {
     const user = await User.findByPk(userId, {
-      attributes: ["id", "username", "email", "role"],
+      attributes: [
+        "id",
+        "nombre",
+        "apellido",
+        "email",
+        "fechaNacimiento",
+        "telefono",
+        "role",
+      ],
     });
     if (!user) return res.status(404).json({message: "User not found"});
     res.json(user);

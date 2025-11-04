@@ -1,6 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../store/auth";
-import {LogOut, Settings, User} from "lucide-react";
+import {KeyRound, LogOut, MoveLeft, Settings, User} from "lucide-react";
+import {useState} from "react";
 
 interface ProfileTabProps {
   onClose: () => void;
@@ -10,11 +11,7 @@ export const ProfileTab = ({onClose}: ProfileTabProps) => {
   const user = useAuth((s) => s.user);
   const logout = useAuth((s) => s.logout);
   const navigate = useNavigate();
-
-  const handleNavigate = (path: string) => {
-    onClose();
-    navigate(path);
-  };
+  const [view, setView] = useState<"main" | "info" | "password">("main");
 
   const handleLogout = () => {
     logout();
@@ -22,43 +19,157 @@ export const ProfileTab = ({onClose}: ProfileTabProps) => {
     navigate("/", {replace: true});
   };
 
-  return (
-    <div className="w-80 mx-auto">
-      <div className="text-center mb-6">
-        <div className="w-20 h-20 mx-auto rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-3xl mb-3">
-          {user?.username?.charAt(0).toUpperCase()}
+  if (view === "main") {
+    return (
+      <div className="w-80 mx-auto">
+        <h1 className="text-3xl text-white font-medium">
+          HOLA, {user?.nombre.toUpperCase()}
+        </h1>
+        <div className="text-center mb-6 mt-6 flex items-center justify-center">
+          <div className="w-32 h-32 rounded-full bg-neutral-700 flex items-center justify-center text-white font-bold  mb-3">
+            <User size={75} color="black" />
+          </div>
         </div>
-        <h2 className="text-xl font-bold">{user?.username}</h2>
-        <p className="text-sm text-gray-600">{user?.email}</p>
-      </div>
 
-      <div className="flex flex-col gap-3">
-        <button
-          onClick={() => handleNavigate("/dashboard")}
-          className="flex items-center gap-3 px-4 py-3 rounded-md border border-gray-300 hover:bg-gray-50 transition text-left"
-        >
-          <User size={20} />
-          <span className="font-medium">Mi perfil</span>
-        </button>
-
-        {user?.role === "admin" && (
+        <div className="flex flex-col rounded-xl bg-neutral-800">
           <button
-            onClick={() => handleNavigate("/admin")}
-            className="flex items-center gap-3 px-4 py-3 rounded-md border border-gray-300 hover:bg-gray-50 transition text-left"
+            onClick={() => setView("info")}
+            className="flex items-center gap-3 px-4 py-6 hover:bg-neutral-600 transition text-left text-neutral-200 border-b border-b-black rounded-t-xl"
           >
-            <Settings size={20} />
-            <span className="font-medium">Panel Admin</span>
+            <User size={20} />
+            <span className="font-medium">MI CUENTA</span>
           </button>
-        )}
-
+          <button
+            onClick={() => setView("password")}
+            className="flex items-center gap-3 px-4 py-6 hover:bg-neutral-600 transition text-left text-neutral-200 border-b border-b-black"
+          >
+            <KeyRound size={20} />
+            <span className="font-medium">Cambiar contraseña</span>
+          </button>
+          {user?.role === "admin" && (
+            <button
+              onClick={() => {
+                onClose();
+                navigate("/admin");
+              }}
+              className="flex items-center gap-3 px-4 py-6 hover:bg-neutral-600 transition text-left text-neutral-200"
+            >
+              <Settings size={20} />
+              <span className="font-medium">Panel Admin</span>
+            </button>
+          )}
+        </div>
         <button
           onClick={handleLogout}
-          className="flex items-center justify-center gap-3 px-4 py-3 rounded-md bg-red-600 text-white hover:bg-red-700 transition font-semibold mt-2"
+          className="flex items-center justify-start gap-3 px-4 py-3 font-semibold text-neutral-500"
         >
           <LogOut size={20} />
           Cerrar sesión
         </button>
       </div>
-    </div>
-  );
+    );
+  }
+
+  if (view === "info") {
+    return (
+      <div className="w-80 mx-auto">
+        <button
+          className="bg-stone-700 px-2 py-1 rounded-lg cursor-pointer mb-4"
+          onClick={() => setView("main")}
+        >
+          <MoveLeft className="text-gray-400" />
+        </button>
+        <h2 className="text-xl font-bold mb-4">Información personal</h2>
+        <form className="flex flex-col gap-3">
+          <div>
+            <label className="block text-sm font-semibold mb-1 text-neutral-300">
+              Nombre
+            </label>
+            <input
+              type="text"
+              value={user?.nombre || ""}
+              disabled
+              className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold mb-1 text-neutral-300">
+              Apellido
+            </label>
+            <input
+              type="text"
+              value={user?.apellido || ""}
+              disabled
+              className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold mb-1 text-neutral-300">
+              Correo electrónico
+            </label>
+            <input
+              type="email"
+              value={user?.email || ""}
+              disabled
+              className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold mb-1 text-neutral-300">
+              Fecha de nacimiento
+            </label>
+            <input
+              type="date"
+              value={user?.fechaNacimiento || ""}
+              disabled
+              className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold mb-1 text-neutral-300">
+              Número de teléfono
+            </label>
+            <input
+              type="tel"
+              value={user?.telefono || ""}
+              disabled
+              className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold mb-1 text-neutral-300">
+              Género
+            </label>
+            <input
+              type="text"
+              value={user?.genero || ""}
+              disabled
+              className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
+            />
+          </div>
+        </form>
+      </div>
+    );
+  }
+
+  // Sub-tab: Cambiar contraseña
+  if (view === "password") {
+    return (
+      <div className="w-80 mx-auto">
+        <button
+          className="bg-stone-700 px-2 py-1 rounded-lg cursor-pointer mb-4"
+          onClick={() => setView("main")}
+        >
+          <MoveLeft className="text-gray-400" />
+        </button>
+        <h2 className="text-xl font-bold mb-4">Cambiar contraseña</h2>
+        {/* Acá poné tu formulario de cambio de contraseña */}
+        <div className="text-gray-400 text-sm">
+          Funcionalidad próximamente...
+        </div>
+      </div>
+    );
+  }
+
+  return null;
 };
