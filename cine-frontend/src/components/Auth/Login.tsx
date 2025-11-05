@@ -49,7 +49,7 @@ export const Login = ({onSuccess}: {onSuccess?: () => void}) => {
   };
 
   return (
-    <div className="w-80 mx-auto">
+    <div className="w-80 mx-auto text-white">
       {error && (
         <div className="bg-red-500 text-white p-2 mb-4 rounded-md">{error}</div>
       )}
