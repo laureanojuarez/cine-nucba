@@ -33,7 +33,7 @@ export const SideTab = ({
         >
           ✕
         </button>
-        <div className="p-6 pt-16 h-full overflow-y-auto">{children}</div>
+        <div className=" pt-16 h-full overflow-y-auto">{children}</div>
       </div>
     </>
   );

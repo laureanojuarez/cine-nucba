@@ -43,7 +43,7 @@ const Layout = () => {
             setIsLoginOpen(false);
           }}
         />
-        <div className="mt-4 text-center">
+        <div className="mt-4 text-center text-white">
           ¿No tienes cuenta?{" "}
           <button
             className="text-blue-600 underline"
