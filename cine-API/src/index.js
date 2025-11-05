@@ -3,6 +3,7 @@ import authRoutes from "./routes/auth.routes.js";
 import peliculasRoutes from "./routes/peliculas.routes.js";
 import reservaRoutes from "./routes/reserva.routes.js";
 import salaRoutes from "./routes/sala.routes.js";
+import profileRoutes from "./routes/profile.routes.js";
 import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
@@ -43,6 +44,7 @@ app.use("/auth", authRoutes);
 app.use("/peliculas", peliculasRoutes);
 app.use("/salas", salaRoutes);
 app.use("/reservas", reservaRoutes);
+app.use("/profile", profileRoutes);
 
 try {
   await sequelize.authenticate();
