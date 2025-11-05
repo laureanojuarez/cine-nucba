@@ -12,7 +12,7 @@ export const Login = ({onSuccess}: {onSuccess?: () => void}) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const API_URL = import.meta.env.VITE_BACKEND_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const INITIAL_VALUES = {
     email: "",

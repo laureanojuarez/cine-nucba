@@ -10,6 +10,7 @@ interface ProfileTabProps {
 
 export const ProfileTab = ({onClose}: ProfileTabProps) => {
   const user = useAuth((s) => s.user);
+  console.log("User in ProfileTab:", user);
   const logout = useAuth((s) => s.logout);
   const navigate = useNavigate();
   const [view, setView] = useState<"main" | "info" | "password">("main");
@@ -24,7 +25,7 @@ export const ProfileTab = ({onClose}: ProfileTabProps) => {
     return (
       <div className="w-80 mx-auto">
         <h1 className="text-3xl text-white font-medium">
-          HOLA, {user?.nombre.toUpperCase()}
+          HOLA, {user?.nombre?.toUpperCase() ?? "USUARIO"}
         </h1>
         <div className="text-center mb-6 mt-6 flex items-center justify-center">
           <div className="w-32 h-32 rounded-full bg-neutral-700 flex items-center justify-center text-white font-bold  mb-3">

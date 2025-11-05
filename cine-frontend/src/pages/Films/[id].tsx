@@ -14,7 +14,7 @@ export default function FilmDetail() {
   const token = useAuth((state) => state.token);
   const user = useAuth((state) => state.user);
 
-  const API_URL = import.meta.env.VITE_BACKEND_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   async function handleCheckout() {
     if (!user) return alert("Debes iniciar sesion");

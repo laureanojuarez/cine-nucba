@@ -20,8 +20,12 @@ const app = express();
 const PORT = 3000;
 
 // Middleware
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 app.use(express.json());
-app.use(cors());
 
 // Relations
 User.hasMany(Reserva, {foreignKey: "userId"});

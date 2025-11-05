@@ -22,7 +22,7 @@ export default function Dashboard() {
   const token = useAuth((state) => state.token);
   const [entradas, setEntradas] = useState<Reserva[]>([]);
 
-  const API_URL = import.meta.env.VITE_BACKEND_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const fetchUserData = async () => {
     try {
@@ -87,7 +87,7 @@ export default function Dashboard() {
             <div className="flex flex-col items-center gap-2">
               <span className="text-4xl">🎬</span>
               <h1 className="text-3xl font-extrabold text-gray-900 drop-shadow mb-1">
-                ¡Hola, {user?.username}!
+                ¡Hola, {user?.nombre}!
               </h1>
               <p className="text-gray-600 mb-2">{user?.email}</p>
             </div>

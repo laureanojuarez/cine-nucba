@@ -4,7 +4,7 @@ import {FilmCard} from "./FilmCard";
 
 export const FilmSection = () => {
   const [films, setFilms] = useState<any[]>([]);
-  const API_URL = import.meta.env.VITE_BACKEND_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchFilms = async () => {
@@ -24,7 +24,9 @@ export const FilmSection = () => {
         Peliculas en cartelera
       </h1>
       {films.length === 0 ? (
-        <div className="text-white text-xl">No hay peliculas disponibles</div>
+        <section className="text-white text-xl h-96 flex items-center justify-center">
+          No hay peliculas disponibles en este momento.
+        </section>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 w-full max-w-5xl">
           {films.map((f) => (

@@ -6,8 +6,31 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Admin from "./pages/Admin/Admin";
 import Support from "./pages/Support/Support";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {useAuth} from "./store/auth";
+import {useEffect} from "react";
+import axios from "axios";
 
 function App() {
+  const token = useAuth((state) => state.token);
+  const setUser = useAuth((state) => state.setUser);
+  const logout = useAuth((state) => state.logout);
+
+  useEffect(() => {
+    if (!token) return;
+    axios
+      .get("/auth/me")
+      .then((response) => {
+        if (typeof response.data === "string") {
+          throw new Error("Respuesta no JSON (¿URL del backend incorrecta?)");
+        }
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+        logout();
+      });
+  }, [token, setUser, logout]);
+
   return (
     <BrowserRouter>
       <Routes>

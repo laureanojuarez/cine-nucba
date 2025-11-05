@@ -1,4 +1,6 @@
+import axios from "axios";
 import {create} from "zustand";
+import {persist, createJSONStorage} from "zustand/middleware";
 
 interface User {
   id: number;
@@ -19,21 +21,31 @@ interface AuthState {
   logout: () => void;
 }
 
-export const useAuth = create<AuthState>((set) => ({
-  token: localStorage.getItem("token") || null,
-  user: null,
+export const useAuth = create<AuthState>()(
+  persist(
+    (set) => ({
+      token: null,
+      user: null,
+      setToken: (token) => {
+        localStorage.setItem("token", token);
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+        set({token});
+      },
 
-  setToken: (token) => {
-    localStorage.setItem("token", token);
-    set({token});
-  },
+      setUser: (user) => {
+        set({user});
+      },
 
-  setUser: (user) => {
-    set({user});
-  },
+      logout: () => {
+        localStorage.removeItem("token");
+        delete axios.defaults.headers.common.Authorization;
+        set({token: null, user: null});
+      },
+    }),
 
-  logout: () => {
-    localStorage.removeItem("token");
-    set({token: null, user: null});
-  },
-}));
+    {
+      name: "auth",
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
