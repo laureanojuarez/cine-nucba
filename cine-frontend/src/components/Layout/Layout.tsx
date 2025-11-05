@@ -4,7 +4,7 @@ import {Header} from "../Header/Header";
 import {SideTab} from "../Tab/SideTab";
 import {Login} from "../Auth/Login";
 import {Register} from "../Auth/Register";
-import {ProfileTab} from "../Tab/ProfileTab";
+import {ProfileTab} from "../Tab/ProfileTab/ProfileTab";
 import {useAuth} from "../../store/auth";
 import {Footer} from "../Footer/Footer";
 
