@@ -17,18 +17,17 @@ function App() {
 
   useEffect(() => {
     if (!token) return;
-    axios
-      .get("/auth/me")
-      .then((response) => {
-        if (typeof response.data === "string") {
-          throw new Error("Respuesta no JSON (¿URL del backend incorrecta?)");
-        }
-        setUser(response.data);
-      })
-      .catch((error) => {
+
+    const fetchUser = async () => {
+      try {
+        const {data} = await axios.get("/auth/me");
+        setUser(data);
+      } catch (error) {
         console.error("Error fetching user data:", error);
         logout();
-      });
+      }
+    };
+    fetchUser();
   }, [token, setUser, logout]);
 
   return (

@@ -26,8 +26,8 @@ export const useAuth = create<AuthState>()(
     (set) => ({
       token: null,
       user: null,
+
       setToken: (token) => {
-        localStorage.setItem("token", token);
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
         set({token});
       },
@@ -37,7 +37,6 @@ export const useAuth = create<AuthState>()(
       },
 
       logout: () => {
-        localStorage.removeItem("token");
         delete axios.defaults.headers.common.Authorization;
         set({token: null, user: null});
       },
@@ -46,6 +45,11 @@ export const useAuth = create<AuthState>()(
     {
       name: "auth",
       storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        if (state?.token) {
+          axios.defaults.headers.common.Authorization = `Bearer ${state.token}`;
+        }
+      },
     }
   )
 );
