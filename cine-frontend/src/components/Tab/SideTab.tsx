@@ -11,7 +11,7 @@ export const SideTab = ({
   open,
   onClose,
   children,
-  width = "w-104",
+  width = "w-full md:w-104",
 }: SideTabProps) => {
   return (
     <>
