@@ -1,5 +1,5 @@
 import {Field, Form, Formik, ErrorMessage, type FormikHelpers} from "formik";
-import {MoveLeft, X} from "lucide-react";
+import {MoveLeft} from "lucide-react";
 import {validateSchema} from "./validateschema-profile";
 import axios from "axios";
 import {toast} from "sonner";
@@ -95,14 +95,6 @@ export const Info = ({setView, user}: InfoProps) => {
           <MoveLeft className="text-gray-400" />
         </button>
         <h2 className="text-xl font-bold text-white">Información personal</h2>
-        <button
-          type="button"
-          className="bg-stone-700 px-2 py-1 rounded-lg cursor-pointer"
-          onClick={() => setView("main")}
-          aria-label="Cerrar"
-        >
-          <X className="text-gray-400" />
-        </button>
       </div>
 
       {/* Form */}
@@ -114,141 +106,143 @@ export const Info = ({setView, user}: InfoProps) => {
       >
         {({isSubmitting}) => (
           <Form className="flex flex-col gap-3 flex-1">
-            {/* Nombre */}
-            <div>
-              <label
-                htmlFor="nombre"
-                className="block text-sm font-semibold mb-1 text-neutral-300"
-              >
-                Nombre
-              </label>
-              <Field
-                id="nombre"
-                name="nombre"
-                type="text"
-                className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
-              />
-              <ErrorMessage
-                name="nombre"
-                component="div"
-                className="text-red-500 text-sm mt-1"
-              />
-            </div>
+            <section className="p-2">
+              {/* Nombre */}
+              <div>
+                <label
+                  htmlFor="nombre"
+                  className="block text-sm font-semibold mb-1 text-neutral-300"
+                >
+                  Nombre
+                </label>
+                <Field
+                  id="nombre"
+                  name="nombre"
+                  type="text"
+                  className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
+                />
+                <ErrorMessage
+                  name="nombre"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-            {/* Apellido */}
-            <div>
-              <label
-                htmlFor="apellido"
-                className="block text-sm font-semibold mb-1 text-neutral-300"
-              >
-                Apellido
-              </label>
-              <Field
-                id="apellido"
-                name="apellido"
-                type="text"
-                className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
-              />
-              <ErrorMessage
-                name="apellido"
-                component="div"
-                className="text-red-500 text-sm mt-1"
-              />
-            </div>
+              {/* Apellido */}
+              <div>
+                <label
+                  htmlFor="apellido"
+                  className="block text-sm font-semibold mb-1 text-neutral-300"
+                >
+                  Apellido
+                </label>
+                <Field
+                  id="apellido"
+                  name="apellido"
+                  type="text"
+                  className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
+                />
+                <ErrorMessage
+                  name="apellido"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-            {/* Email (disabled) */}
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-semibold mb-1 text-neutral-300"
-              >
-                Correo electrónico
-              </label>
-              <Field
-                id="email"
-                name="email"
-                type="email"
-                disabled
-                className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600 cursor-not-allowed opacity-60"
-              />
-            </div>
+              {/* Email (disabled) */}
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-semibold mb-1 text-neutral-300"
+                >
+                  Correo electrónico
+                </label>
+                <Field
+                  id="email"
+                  name="email"
+                  type="email"
+                  disabled
+                  className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600 cursor-not-allowed opacity-60"
+                />
+              </div>
 
-            {/* Fecha de nacimiento */}
-            <div>
-              <label
-                htmlFor="fechaNacimiento"
-                className="block text-sm font-semibold mb-1 text-neutral-300"
-              >
-                Fecha de nacimiento
-              </label>
-              <Field
-                id="fechaNacimiento"
-                name="fechaNacimiento"
-                type="date"
-                className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
-              />
-              <ErrorMessage
-                name="fechaNacimiento"
-                component="div"
-                className="text-red-500 text-sm mt-1"
-              />
-            </div>
+              {/* Fecha de nacimiento */}
+              <div>
+                <label
+                  htmlFor="fechaNacimiento"
+                  className="block text-sm font-semibold mb-1 text-neutral-300"
+                >
+                  Fecha de nacimiento
+                </label>
+                <Field
+                  id="fechaNacimiento"
+                  name="fechaNacimiento"
+                  type="date"
+                  className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
+                />
+                <ErrorMessage
+                  name="fechaNacimiento"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-            {/* Teléfono */}
-            <div>
-              <label
-                htmlFor="telefono"
-                className="block text-sm font-semibold mb-1 text-neutral-300"
-              >
-                Número de teléfono
-              </label>
-              <Field
-                id="telefono"
-                name="telefono"
-                type="tel"
-                className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
-                placeholder="+54..."
-              />
-              <ErrorMessage
-                name="telefono"
-                component="div"
-                className="text-red-500 text-sm mt-1"
-              />
-            </div>
+              {/* Teléfono */}
+              <div>
+                <label
+                  htmlFor="telefono"
+                  className="block text-sm font-semibold mb-1 text-neutral-300"
+                >
+                  Número de teléfono
+                </label>
+                <Field
+                  id="telefono"
+                  name="telefono"
+                  type="tel"
+                  className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
+                  placeholder="+54..."
+                />
+                <ErrorMessage
+                  name="telefono"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-            {/* Género */}
-            <div>
-              <label
-                htmlFor="genero"
-                className="block text-sm font-semibold mb-1 text-neutral-300"
-              >
-                Género
-              </label>
-              <Field
-                id="genero"
-                name="genero"
-                as="select"
-                className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
-              >
-                <option value="">Seleccionar...</option>
-                <option value="masculino">Masculino</option>
-                <option value="femenino">Femenino</option>
-                <option value="otro">Otro</option>
-                <option value="prefiero-no-decir">Prefiero no decir</option>
-              </Field>
-              <ErrorMessage
-                name="genero"
-                component="div"
-                className="text-red-500 text-sm mt-1"
-              />
-            </div>
+              {/* Género */}
+              <div>
+                <label
+                  htmlFor="genero"
+                  className="block text-sm font-semibold mb-1 text-neutral-300"
+                >
+                  Género
+                </label>
+                <Field
+                  id="genero"
+                  name="genero"
+                  as="select"
+                  className="w-full p-2 rounded-md bg-neutral-700 text-neutral-200 border border-neutral-600"
+                >
+                  <option value="">Seleccionar...</option>
+                  <option value="masculino">Masculino</option>
+                  <option value="femenino">Femenino</option>
+                  <option value="otro">Otro</option>
+                  <option value="prefiero-no-decir">Prefiero no decir</option>
+                </Field>
+                <ErrorMessage
+                  name="genero"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+            </section>
 
             {/* Submit button */}
-            <div className="mt-auto w-full bg-white py-10 flex items-center justify-center">
+            <div className="mt-auto w-full h-30 flex items-center justify-center">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-black text-white px-6 py-2 rounded font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-neutral-800 w-full h-full text-white px-6 py-2 rounded font-bold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "ACTUALIZANDO..." : "ACTUALIZAR DATOS"}
               </button>

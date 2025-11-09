@@ -1,3 +1,4 @@
+import {X} from "lucide-react";
 import type {ReactNode} from "react";
 
 interface SideTabProps {
@@ -27,11 +28,11 @@ export const SideTab = ({
         aria-modal="true"
       >
         <button
-          className="absolute top-4 right-4 text-gray-500 hover:text-black text-2xl"
+          className="absolute top-4 right-4 text-gray-500 hover:text-white text-2xl"
           onClick={onClose}
           aria-label="Cerrar"
         >
-          ✕
+          <X />
         </button>
         <div className=" pt-16 h-full overflow-y-auto">{children}</div>
       </div>

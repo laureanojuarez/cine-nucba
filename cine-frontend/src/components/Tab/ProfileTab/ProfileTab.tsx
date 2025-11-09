@@ -1,8 +1,9 @@
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../store/auth";
-import {KeyRound, LogOut, MoveLeft, Settings, User} from "lucide-react";
+import {KeyRound, LogOut, Settings, User} from "lucide-react";
 import {useState} from "react";
 import {Info} from "./Info";
+import {Password} from "./Password";
 
 interface ProfileTabProps {
   onClose: () => void;
@@ -81,21 +82,8 @@ export const ProfileTab = ({onClose}: ProfileTabProps) => {
 
   // Sub-tab: Cambiar contraseña
   if (view === "password") {
-    return (
-      <div className="w-80 mx-auto">
-        <button
-          className="bg-stone-700 px-2 py-1 rounded-lg cursor-pointer mb-4"
-          onClick={() => setView("main")}
-        >
-          <MoveLeft className="text-gray-400" />
-        </button>
-        <h2 className="text-xl font-bold mb-4">Cambiar contraseña</h2>
-        {/* Acá poné tu formulario de cambio de contraseña */}
-        <div className="text-gray-400 text-sm">
-          Funcionalidad próximamente...
-        </div>
-      </div>
-    );
+    if (!user) return <div className="text-white p-4">Cargando usuario...</div>;
+    return <Password setView={setView} />;
   }
 
   return null;

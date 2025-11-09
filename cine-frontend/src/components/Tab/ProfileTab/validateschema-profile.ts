@@ -16,3 +16,15 @@ export const validateSchema = Yup.object().shape({
     .max(15, "El número de teléfono es demasiado largo"),
   genero: Yup.string(),
 });
+
+export const passwordValidateSchema = Yup.object().shape({
+  password: Yup.string()
+    .min(6, "La contraseña debe tener al menos 6 caracteres")
+    .required("La contraseña es obligatoria"),
+  newPassword: Yup.string()
+    .min(6, "La nueva contraseña debe tener al menos 6 caracteres")
+    .required("La nueva contraseña es obligatoria"),
+  repeatPassword: Yup.string()
+    .oneOf([Yup.ref("newPassword"), null], "Las contraseñas no coinciden")
+    .required("Repetir contraseña es obligatorio"),
+});
