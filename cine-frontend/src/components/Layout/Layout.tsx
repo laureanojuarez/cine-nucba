@@ -7,28 +7,36 @@ import {Register} from "../Auth/Register";
 import {ProfileTab} from "../Tab/ProfileTab/ProfileTab";
 import {useAuth} from "../../store/auth";
 import {Footer} from "../Footer/Footer";
+import {useUI} from "../../store/useUI";
 
 const Layout = () => {
   const {pathname} = useLocation();
   const token = useAuth((s) => s.token);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  const {
+    loginOpen,
+    profileOpen,
+    openLogin,
+    closeLogin,
+    openProfile,
+    closeProfile,
+  } = useUI();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
   useEffect(() => {
-    if (!token) setIsProfileOpen(false);
-  }, [token]);
+    if (!token) closeProfile();
+  }, [token, closeProfile]);
 
   return (
     <div className="min-h-screen bg-neutral-900">
       <Header
-        onOpenLogin={() => setIsLoginOpen(true)}
+        onOpenLogin={openLogin}
         onOpenRegister={() => setIsRegisterOpen(true)}
-        onOpenProfile={() => setIsProfileOpen(true)}
+        onOpenProfile={openProfile}
       />
 
       <main>
@@ -37,10 +45,10 @@ const Layout = () => {
       <Footer />
 
       {/* Tabs laterales */}
-      <SideTab open={isLoginOpen} onClose={() => setIsLoginOpen(false)}>
+      <SideTab open={loginOpen} onClose={closeLogin}>
         <Login
           onSuccess={() => {
-            setIsLoginOpen(false);
+            closeLogin();
           }}
         />
         <div className="mt-4 text-center text-white">
@@ -48,7 +56,7 @@ const Layout = () => {
           <button
             className="text-blue-600 underline"
             onClick={() => {
-              setIsLoginOpen(false);
+              closeLogin();
               setIsRegisterOpen(true);
             }}
           >
@@ -69,7 +77,7 @@ const Layout = () => {
             className="text-blue-600 underline"
             onClick={() => {
               setIsRegisterOpen(false);
-              setIsLoginOpen(true);
+              openLogin();
             }}
           >
             Inicia sesión
@@ -77,7 +85,7 @@ const Layout = () => {
         </div>
       </SideTab>
 
-      <SideTab open={isProfileOpen} onClose={() => setIsProfileOpen(false)}>
+      <SideTab open={profileOpen} onClose={closeProfile}>
         <ProfileTab onClose={closeProfile} />
       </SideTab>
     </div>

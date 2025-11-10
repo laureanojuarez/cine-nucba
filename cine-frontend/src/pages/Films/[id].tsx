@@ -1,4 +1,4 @@
-import {Link, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import Seats from "../../components/Seats/Seats";
 import {useFilm} from "../../hooks/useFilms";
 import {useSalas} from "../../hooks/useSalas";
@@ -6,6 +6,7 @@ import {useAuth} from "../../store/auth";
 import {useState} from "react";
 import axios from "axios";
 import {toast} from "sonner";
+import {useUI} from "../../store/useUI";
 
 export default function FilmDetail() {
   const {id} = useParams<{id: string}>();
@@ -14,6 +15,7 @@ export default function FilmDetail() {
   const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
   const token = useAuth((state) => state.token);
   const user = useAuth((state) => state.user);
+  const openLogin = useUI((s) => s.openLogin);
 
   async function handleCheckout() {
     if (!user) {
@@ -150,12 +152,12 @@ export default function FilmDetail() {
               </button>
             </div>
           ) : (
-            <Link
-              to="/login"
+            <button
+              onClick={openLogin}
               className="inline-block bg-blue-600 hover:bg-blue-500 px-5 py-3 rounded-lg font-semibold text-white text-center transition"
             >
               Inicia sesión para comprar entradas
-            </Link>
+            </button>
           )}
         </main>
       </div>
