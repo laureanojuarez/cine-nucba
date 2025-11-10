@@ -78,7 +78,7 @@ const Layout = () => {
       </SideTab>
 
       <SideTab open={isProfileOpen} onClose={() => setIsProfileOpen(false)}>
-        <ProfileTab onClose={() => setIsProfileOpen(false)} />
+        <ProfileTab onClose={closeProfile} />
       </SideTab>
     </div>
   );

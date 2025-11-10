@@ -11,7 +11,6 @@ interface HeaderProps {
 
 export const Header = ({onOpenLogin, onOpenProfile}: HeaderProps) => {
   const token = useAuth((s) => s.token);
-  const user = useAuth((s) => s.user);
 
   return (
     <div className="w-full sticky top-0 z-50 backdrop-blur border-b border-neutral-900/80 shadow-sm">
@@ -43,7 +42,6 @@ export const Header = ({onOpenLogin, onOpenProfile}: HeaderProps) => {
               <button
                 className="text-white hover:text-green-400"
                 onClick={onOpenProfile}
-                title={user?.username}
               >
                 <UserCog />
               </button>
@@ -54,7 +52,7 @@ export const Header = ({onOpenLogin, onOpenProfile}: HeaderProps) => {
               onClick={onOpenLogin}
               title="Iniciar sesión"
             >
-              <User />
+              <User size={18} cursor={"pointer"} />
             </button>
           )}
         </nav>
