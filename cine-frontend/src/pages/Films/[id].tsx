@@ -1,10 +1,9 @@
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import Seats from "../../components/Seats/Seats";
 import {useFilm} from "../../hooks/useFilms";
 import {useSalas} from "../../hooks/useSalas";
 import {useAuth} from "../../store/auth";
 import {useState} from "react";
-import axios from "axios";
 import {toast} from "sonner";
 import {useUI} from "../../store/useUI";
 
@@ -16,6 +15,7 @@ export default function FilmDetail() {
   const token = useAuth((state) => state.token);
   const user = useAuth((state) => state.user);
   const openLogin = useUI((s) => s.openLogin);
+  const navigate = useNavigate();
 
   async function handleCheckout() {
     if (!user) {
@@ -33,17 +33,16 @@ export default function FilmDetail() {
       return;
     }
 
-    try {
-      await axios.post("/reservas", {
-        userId: user.id,
+    navigate("/checkout", {
+      state: {
+        filmId: id,
+        filmTitle: film?.title,
+        filmPoster: film?.poster,
         salaId,
-        seatIds: selectedSeats,
-      });
-      toast.success("Reserva realizada con éxito");
-      setSelectedSeats([]);
-    } catch (error) {
-      toast.error("Error al realizar la reserva");
-    }
+        salaNumber: salas[0].salaNumber,
+        selectedSeats,
+      },
+    });
   }
 
   if (filmLoading || salasLoading) {

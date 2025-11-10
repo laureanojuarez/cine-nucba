@@ -9,6 +9,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {useAuth} from "./store/auth";
 import {useEffect} from "react";
 import axios from "axios";
+import Checkout from "./pages/Checkout/Checkout";
 
 function App() {
   const token = useAuth((state) => state.token);
@@ -37,6 +38,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="films/:id" element={<FilmDetail />} />
           <Route path="support" element={<Support />} />
+          <Route path="checkout" element={<Checkout />} />
           <Route element={<Protected />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="admin" element={<Admin />} />
