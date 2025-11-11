@@ -10,6 +10,8 @@ const User = sequelize.define("User", {
   telefono: {type: DataTypes.STRING, allowNull: true},
   genero: {type: DataTypes.STRING, allowNull: true},
   role: {type: DataTypes.STRING, defaultValue: "user"},
+  createdAt: {type: DataTypes.DATE, defaultValue: DataTypes.NOW},
+  updatedAt: {type: DataTypes.DATE, defaultValue: DataTypes.NOW},
 });
 
 export default User;

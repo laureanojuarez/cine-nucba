@@ -1,8 +1,8 @@
-import { Sequelize } from "sequelize";
+import {Sequelize} from "sequelize";
 
-const sequelize = new Sequelize({
-  dialect: "sqlite",
-  storage: "./dev.sqlite",
+const sequelize = new Sequelize("cine_rio", "root", "root", {
+  host: "localhost",
+  dialect: "mysql",
 });
 
 export default sequelize;
