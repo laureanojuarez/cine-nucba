@@ -1,11 +1,11 @@
 import {useNavigate, useParams} from "react-router-dom";
 import Seats from "../../components/Seats/Seats";
-import {useFilm} from "../../hooks/useFilms";
 import {useSalas} from "../../hooks/useSalas";
 import {useAuth} from "../../store/auth";
 import {useState} from "react";
 import {toast} from "sonner";
 import {useUI} from "../../store/useUI";
+import {useFilm} from "../../hooks/Films/useFilm";
 
 export default function FilmDetail() {
   const {id} = useParams<{id: string}>();

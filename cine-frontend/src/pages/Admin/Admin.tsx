@@ -1,7 +1,7 @@
 import {toast} from "sonner";
 import {MovieForm} from "../../components/admin/components/MovieForm/MovieForm";
 import {MovieList} from "../../components/admin/components/MovieList/MovieList";
-import {useFilms} from "../../hooks/useFilms";
+import {useFilms} from "../../hooks/Films/useFilms";
 import axios from "axios";
 import {useState} from "react";
 
