@@ -1,46 +1,11 @@
-import axios from "axios";
-import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {useAuth} from "../../store/auth";
-
-interface Reserva {
-  id: number;
-  reservationDate: string;
-  Sala: {
-    id: number;
-    Movie: {title: string};
-  };
-  Seat: {
-    fila: string;
-    numero: number;
-  };
-}
+import {useEntradas} from "../../hooks/useEntradas";
 
 export default function Dashboard() {
   const user = useAuth((state) => state.user);
   const token = useAuth((state) => state.token);
-  const [entradas, setEntradas] = useState<Reserva[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
-    const fetchEntradas = async () => {
-      try {
-        const res = await axios.get(`/reservas/mis-entradas`);
-        setEntradas(res.data);
-      } catch (error) {
-        console.error("Error fetching entradas:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEntradas();
-  }, [token]);
+  const {entradas, loading} = useEntradas();
 
   if (loading) {
     return (
