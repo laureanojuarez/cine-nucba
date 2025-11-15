@@ -41,16 +41,16 @@ export default function FilmDetail() {
       return;
     }
 
-    navigate("/checkout", {
-      state: {
-        filmId: id,
-        filmTitle: film?.titulo,
-        filmPoster: film?.poster,
-        funcionId: selectedFuncionId,
-        selectedSeats,
-      },
-    });
-  }
+   navigate("/checkout", {
+    state: {
+      filmId: id,
+      filmTitle: film?.titulo,
+      filmPoster: film?.poster,
+      funcionId: selectedFuncionId, // <- Asegúrate de que esto esté aquí
+      selectedSeats,
+    },
+  });
+}
 
   if (filmLoading || funcionesLoading || seatsLoading) {
     return <div className="text-white p-6">Cargando…</div>;

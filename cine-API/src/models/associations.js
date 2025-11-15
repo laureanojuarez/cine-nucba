@@ -11,31 +11,31 @@ export function applyAssociations() {
   Sala.hasMany(Seat, { foreignKey: "salaId", as: "Seats", onDelete: "CASCADE", hooks: true });
   Seat.belongsTo(Sala, { foreignKey: "salaId" });
 
-  // Funciones
+  // Movie -> Funcion
   Movie.hasMany(Funcion, { foreignKey: "movieId", onDelete: "CASCADE", hooks: true });
   Funcion.belongsTo(Movie, { foreignKey: "movieId" });
 
+  // Sala -> Funcion
   Sala.hasMany(Funcion, { foreignKey: "salaId", onDelete: "CASCADE", hooks: true });
   Funcion.belongsTo(Sala, { foreignKey: "salaId" });
 
-    // Asociación ButacaFuncion <-> Seat
-  ButacaFuncion.belongsTo(Seat, { foreignKey: "seatId" });
-  Seat.hasMany(ButacaFuncion, { foreignKey: "seatId" });
-
-  // Butaca por función
+  // Funcion -> ButacaFuncion
   Funcion.hasMany(ButacaFuncion, { foreignKey: "funcionId", onDelete: "CASCADE", hooks: true });
   ButacaFuncion.belongsTo(Funcion, { foreignKey: "funcionId" });
 
-  ButacaFuncion.belongsTo(Seat, { foreignKey: "seatId" });
+  // Seat -> ButacaFuncion (solo UNA vez)
   Seat.hasMany(ButacaFuncion, { foreignKey: "seatId", onDelete: "CASCADE", hooks: true });
+  ButacaFuncion.belongsTo(Seat, { foreignKey: "seatId" });
 
-  // Reservas (si reservas por función, agrega funcionId en Reserva y descomenta)
+  // User -> Reserva
   User.hasMany(Reserva, { foreignKey: "userId", onDelete: "CASCADE", hooks: true });
   Reserva.belongsTo(User, { foreignKey: "userId" });
 
-  // Funcion.hasMany(Reserva, { foreignKey: "funcionId", onDelete: "CASCADE", hooks: true });
-  // Reserva.belongsTo(Funcion, { foreignKey: "funcionId" });
+  // Funcion -> Reserva (CON ALIAS)
+  Funcion.hasMany(Reserva, { foreignKey: "funcionId", onDelete: "CASCADE", hooks: true, as: "reservas" });
+  Reserva.belongsTo(Funcion, { foreignKey: "funcionId", as: "funcion" });
 
-  Seat.hasMany(Reserva, { foreignKey: "seatId", as: "Reservas", onDelete: "CASCADE", hooks: true });
-  Reserva.belongsTo(Seat, { foreignKey: "seatId" });
+  // Seat -> Reserva (CON ALIAS)
+  Seat.hasMany(Reserva, { foreignKey: "seatId" });
+  Reserva.belongsTo(Seat, { foreignKey: "seatId", as: "seat" });
 }

@@ -1,48 +1,44 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import {useAuth} from "../store/auth";
 
-export interface Reserva {
+interface ReservaVM {
   id: number;
-  fecha_compra: string;
-  Sala: {
+  userId: number;
+  funcionId: number;
+  seatId: number;
+  precio: number;
+  createdAt: string;
+  funcion?: {
     id: number;
-    nombre: string;
+    fecha: string;
+    horario: string;
+    sala?: {
+      id: number;
+      nombre: string;
+    };
+    movie?: {
+      id: number;
+      titulo: string;
+    };
   };
-  Seat: {
+  seat?: {
+    id: number;
     fila: string;
     numero: number;
   };
 }
 
 export function useEntradas() {
-  const token = useAuth((state) => state.token);
-  const [entradas, setEntradas] = useState<Reserva[]>([]);
+  const [entradas, setEntradas] = useState<ReservaVM[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) {
-      setEntradas([]);
-      setLoading(false);
-      return;
-    }
+    axios
+      .get<ReservaVM[]>("/reservas/mis-entradas")
+      .then((r) => setEntradas(r.data))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, []);
 
-    const fetchEntradas = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get(`/reservas/mis-entradas`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setEntradas(res.data);
-      } catch (error) {
-        setEntradas([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEntradas();
-  }, [token]);
-
-  return {entradas, loading};
+  return { entradas, loading };
 }

@@ -7,7 +7,6 @@ const Reserva = sequelize.define("reserva", {
   funcionId: { type: DataTypes.INTEGER, allowNull: false },
   seatId: { type: DataTypes.INTEGER, allowNull: false },
   precio: { type: DataTypes.INTEGER, allowNull: true },
-  fecha_compra: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
 });
 
 export default Reserva;

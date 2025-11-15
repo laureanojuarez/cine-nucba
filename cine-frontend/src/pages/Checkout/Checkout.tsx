@@ -1,8 +1,8 @@
-import {useLocation, useNavigate} from "react-router-dom";
-import {useAuth} from "../../store/auth";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../store/auth";
 import axios from "axios";
-import {toast} from "sonner";
-import {useState} from "react";
+import { toast } from "sonner";
+import { useState } from "react";
 
 const PRECIO_POR_ASIENTO = 5000;
 const SERVICIO_WEB_PORCENTAJE = 0.05; // 5%
@@ -13,7 +13,7 @@ export default function Checkout() {
   const user = useAuth((s) => s.user);
   const [loading, setLoading] = useState(false);
 
-  const {filmId, filmTitle, filmPoster, salaId, salaNumber, selectedSeats} =
+  const { filmId, filmTitle, filmPoster, funcionId, selectedSeats } =
     location.state || {};
 
   if (!selectedSeats || selectedSeats.length === 0) {
@@ -42,23 +42,61 @@ export default function Checkout() {
       return;
     }
 
-    setLoading(true);
-    try {
-      await axios.post("/reservas", {
-        userId: user.id,
-        salaId,
-        seatIds: selectedSeats,
-      });
-      toast.success("¡Reserva confirmada!");
-      navigate("/dashboard");
-    } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message || "Error al confirmar la reserva"
-      );
-    } finally {
-      setLoading(false);
+    if (!funcionId) {
+      toast.error("No se encontro la funcion");
+      return;
     }
+
+    console.log("🔍 Validación antes de enviar:");
+    console.log("  - Usuario:", user);
+    console.log("  - FuncionId:", funcionId);
+    console.log("  - SelectedSeats:", selectedSeats);
+    console.log("  - Total:", total);
+
+    setLoading(true);
+
+    try {
+      const payload = {
+        funcionId,
+        seatIds: selectedSeats,
+        precio: Math.round(total), 
+      };
+
+      console.log("📤 Enviando reserva:", payload);
+
+       // Agregar timeout de 30 segundos
+    const response = await axios.post("/reservas", payload, {
+      timeout: 30000,
+    });
+
+     console.log("✅ Respuesta del servidor:", response.data);
+    toast.success("¡Reserva confirmada!");
+
+// Limpiar el estado y navegar
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 1000);
+  } catch (error: any) {
+    console.error("❌ Error completo:", error);
+    console.error("📋 Respuesta del servidor:", error.response?.data);
+    console.error("📊 Status:", error.response?.status);
+    console.error("🔍 Mensaje:", error.message);
+
+    if (error.code === 'ECONNABORTED') {
+      toast.error("La solicitud tardó demasiado. Intenta de nuevo.");
+    } else {
+      toast.error(
+        error?.response?.data?.error ||
+        error?.response?.data?.detalle ||
+        error?.message ||
+        "Error al confirmar la reserva"
+      );
+    }
+  } finally {
+    setLoading(false);
   }
+}
+
 
   return (
     <div className="max-w-3xl mx-auto p-6 text-white">
@@ -72,10 +110,7 @@ export default function Checkout() {
         />
         <div className="flex-1">
           <h2 className="text-2xl font-semibold mb-2">{filmTitle}</h2>
-          <p className="text-neutral-400 mb-1">Sala {salaNumber}</p>
-          <p className="text-neutral-400">
-            Asientos: {selectedSeats.join(", ")}
-          </p>
+          <p className="text-neutral-400">Asientos: {selectedSeats.length}</p>
         </div>
       </div>
 
