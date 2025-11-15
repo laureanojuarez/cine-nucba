@@ -1,7 +1,7 @@
 import {DataTypes} from "sequelize";
 import sequelize from "../db.js";
 
-const User = sequelize.define("User", {
+const User = sequelize.define("user", {
   email: {type: DataTypes.STRING, unique: true, allowNull: false},
   password: {type: DataTypes.STRING, allowNull: false},
   nombre: {type: DataTypes.STRING, allowNull: true},

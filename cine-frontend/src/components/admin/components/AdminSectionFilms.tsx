@@ -1,8 +1,8 @@
 interface Film {
   id: number;
-  title: string;
+  titulo: string;
   genero: string;
-  duration: number;
+  duracion: number;
   poster?: string;
 }
 
@@ -59,8 +59,8 @@ export const AdminSectionFilms: React.FC<AdminSectionFilmsProps> = ({
                 >
                   <input
                     type="text"
-                    name="title"
-                    value={editData.title}
+                    name="titulo"
+                    value={editData.titulo}
                     onChange={handleEditChange}
                     className="px-2 py-1 rounded bg-gray-700 text-white border border-gray-600 focus:ring-2 focus:ring-green-500 transition w-32"
                     required
@@ -77,8 +77,8 @@ export const AdminSectionFilms: React.FC<AdminSectionFilmsProps> = ({
                   />
                   <input
                     type="number"
-                    name="duration"
-                    value={editData.duration}
+                    name="duracion"
+                    value={editData.duracion}
                     onChange={handleEditChange}
                     className="px-2 py-1 rounded bg-gray-700 text-white border border-gray-600 focus:ring-2 focus:ring-green-500 transition w-24"
                     required
@@ -116,7 +116,7 @@ export const AdminSectionFilms: React.FC<AdminSectionFilmsProps> = ({
                   {film.poster ? (
                     <img
                       src={film.poster}
-                      alt={film.title}
+                      alt={film.titulo}
                       className="w-16 h-24 object-cover rounded shadow border border-gray-700 bg-gray-800"
                     />
                   ) : (
@@ -126,11 +126,11 @@ export const AdminSectionFilms: React.FC<AdminSectionFilmsProps> = ({
                   )}
                   <div>
                     <div className="text-lg font-bold text-green-400">
-                      {film.title}
+                      {film.titulo}
                     </div>
                     <div className="text-gray-300">{film.genero}</div>
                     <div className="text-gray-400 text-sm">
-                      {film.duration} min
+                      {film.duracion} min
                     </div>
                   </div>
                 </div>

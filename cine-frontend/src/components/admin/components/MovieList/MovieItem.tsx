@@ -1,8 +1,8 @@
 interface Film {
   id: number;
-  title: string;
+  titulo: string;
   genero: string;
-  duration: number;
+  duracion: number;
   poster?: string;
 }
 
@@ -19,7 +19,7 @@ export const MovieItem = ({film, onEdit, onDelete}: MovieItemProps) => {
         {film.poster ? (
           <img
             src={film.poster}
-            alt={film.title}
+            alt={film.titulo}
             className="w-16 h-24 object-cover rounded shadow border border-gray-700"
           />
         ) : (
@@ -28,9 +28,9 @@ export const MovieItem = ({film, onEdit, onDelete}: MovieItemProps) => {
           </div>
         )}
         <div>
-          <div className="text-lg font-bold text-green-400">{film.title}</div>
+          <div className="text-lg font-bold text-green-400">{film.titulo}</div>
           <div className="text-gray-300">{film.genero}</div>
-          <div className="text-gray-400 text-sm">{film.duration} min</div>
+          <div className="text-gray-400 text-sm">{film.duracion} min</div>
         </div>
       </div>
       <div className="flex gap-2 mt-2 md:mt-0">

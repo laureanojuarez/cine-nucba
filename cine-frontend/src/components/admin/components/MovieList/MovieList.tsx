@@ -3,9 +3,9 @@ import {MovieItem} from "./MovieItem";
 
 interface Film {
   id: number;
-  title: string;
+  titulo: string;
   genero: string;
-  duration: number;
+  duracion: number;
   poster?: string;
 }
 
@@ -15,9 +15,9 @@ interface MovieListProps {
   error: string | null;
   editId: number | null;
   editData: {
-    title: string;
+    titulo: string;
     genero: string;
-    duration: number;
+    duracion: number;
     poster?: string;
   };
   onEdit: (film: Film) => void;

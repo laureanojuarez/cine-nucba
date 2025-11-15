@@ -20,13 +20,13 @@ export const MovieFormFields = ({isSubmitting}: MovieFormFieldsProps) => {
           </label>
           <Field
             type="text"
-            id="title"
-            name="title"
+            id="titulo"
+            name="titulo"
             className="w-full border border-gray-600 rounded px-3 py-2 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
             placeholder="Ej: Matrix"
           />
           <ErrorMessage
-            name="title"
+            name="titulo"
             component="div"
             className="text-red-500 text-sm mt-1"
           />
@@ -55,15 +55,15 @@ export const MovieFormFields = ({isSubmitting}: MovieFormFieldsProps) => {
 
         <div>
           <label
-            htmlFor="duration"
+            htmlFor="duracion"
             className="block font-semibold mb-1 text-gray-200"
           >
             Duración
           </label>
           <Field
             type="number"
-            id="duration"
-            name="duration"
+            id="duracion"
+            name="duracion"
             className="w-full border border-gray-600 rounded px-3 py-2 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
             min={1}
             placeholder="En minutos"

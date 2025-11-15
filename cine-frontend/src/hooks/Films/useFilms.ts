@@ -3,9 +3,9 @@ import axios from "axios";
 
 export interface Film {
   id: number;
-  title: string;
+  titulo: string;
   genero: string;
-  duration: number;
+  duracion: number;
   poster: string;
 }
 

@@ -4,10 +4,10 @@ import {useAuth} from "../store/auth";
 
 export interface Reserva {
   id: number;
-  reservationDate: string;
+  fecha_compra: string;
   Sala: {
     id: number;
-    Movie: {title: string};
+    nombre: string;
   };
   Seat: {
     fila: string;
@@ -30,7 +30,9 @@ export function useEntradas() {
     const fetchEntradas = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`/reservas/mis-entradas`);
+        const res = await axios.get(`/reservas/mis-entradas`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setEntradas(res.data);
       } catch (error) {
         setEntradas([]);

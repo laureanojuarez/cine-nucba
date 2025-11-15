@@ -1,13 +1,13 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../db.js";
 
-const Reserva = sequelize.define("reserva", {
+const ButacaFuncion = sequelize.define("butacafuncion", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  userId: { type: DataTypes.INTEGER, allowNull: false },
   funcionId: { type: DataTypes.INTEGER, allowNull: false },
   seatId: { type: DataTypes.INTEGER, allowNull: false },
-  precio: { type: DataTypes.INTEGER, allowNull: true },
-  fecha_compra: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+  estado: { type: DataTypes.ENUM("libre", "reservada", "ocupada"), defaultValue: "libre" },
+}, {
+  indexes: [{ unique: true, fields: ["funcionId", "seatId"] }],
 });
 
-export default Reserva;
+export default ButacaFuncion;

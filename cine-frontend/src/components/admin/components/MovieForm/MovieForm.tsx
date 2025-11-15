@@ -10,21 +10,19 @@ interface MovieFormProps {
 
 export const MovieForm = ({onSuccess}: MovieFormProps) => {
   const INITIAL_VALUES = {
-    title: "",
+    titulo: "",
     genero: "",
-    duration: "",
+    duracion: "",
     poster: "",
-    sala: "",
   };
 
   const handleSubmit = async (values: any, {setSubmitting, resetForm}: any) => {
     try {
       await axios.post("/peliculas", {
-        title: values.title,
+        titulo: values.titulo,
         genero: values.genero,
-        duration: Number(values.duration),
+        duracion: Number(values.duracion),
         poster: values.poster,
-        salaNumber: Number(values.sala),
       });
 
       toast.success("Película agregada correctamente");

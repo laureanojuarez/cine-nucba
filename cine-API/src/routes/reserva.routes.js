@@ -7,7 +7,7 @@ import {verifyToken} from "../middlewares/verify.middleware.js";
 
 const router = express.Router();
 
-router.post("/", reservarPelicula);
+router.post("/", verifyToken, reservarPelicula);
 router.get("/mis-entradas", verifyToken, getReservasByUser);
 
 export default router;

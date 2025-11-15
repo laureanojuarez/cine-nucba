@@ -4,29 +4,31 @@ import {MovieList} from "../../components/admin/components/MovieList/MovieList";
 import {useFilms} from "../../hooks/Films/useFilms";
 import axios from "axios";
 import {useState} from "react";
+import { SalaForm } from "../../components/admin/components/SalaForm/SalaForm";
+import { FuncionForm } from "../../components/admin/components/FuncionForm";
 
 interface EditData {
-  title: string;
+  titulo: string;
   genero: string;
-  duration: number;
+  duracion: number;
   poster?: string;
 }
 export default function AdminPage() {
   const {films, loading, error, refetch} = useFilms();
   const [editId, setEditId] = useState<number | null>(null);
   const [editData, setEditData] = useState<EditData>({
-    title: "",
+    titulo: "",
     genero: "",
-    duration: 0,
+    duracion: 0,
     poster: "",
   });
 
   const handleEditClick = (film: any) => {
     setEditId(film.id);
     setEditData({
-      title: film.title,
+      titulo: film.titulo,
       genero: film.genero,
-      duration: film.duration,
+      duracion: film.duracion,
       poster: film.poster,
     });
   };
@@ -35,7 +37,7 @@ export default function AdminPage() {
     const {name, value} = e.target;
     setEditData((prev) => ({
       ...prev,
-      [name]: name === "duration" ? Number(value) : value,
+      [name]: name === "duracion" ? Number(value) : value,
     }));
   };
 
@@ -74,6 +76,8 @@ export default function AdminPage() {
       </h1>
 
       <MovieForm onSuccess={refetch} />
+      <SalaForm/>
+      <FuncionForm/>
 
       <MovieList
         films={films}

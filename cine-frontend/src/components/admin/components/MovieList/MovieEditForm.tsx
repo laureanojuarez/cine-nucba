@@ -1,8 +1,8 @@
 interface MovieEditFormProps {
   editData: {
-    title: string;
+    titulo: string;
     genero: string;
-    duration: number;
+    duracion: number;
     poster?: string;
   };
   onSubmit: (e: React.FormEvent) => void;
@@ -26,8 +26,8 @@ export const MovieEditForm = ({
             </label>
             <input
               type="text"
-              name="title"
-              value={editData.title}
+              name="titulo"
+              value={editData.titulo}
               onChange={onChange}
               className="w-full px-3 py-2 rounded bg-gray-700 text-white border border-gray-600 focus:ring-2 focus:ring-green-500"
               required
@@ -54,8 +54,8 @@ export const MovieEditForm = ({
             </label>
             <input
               type="number"
-              name="duration"
-              value={editData.duration}
+              name="duracion"
+              value={editData.duracion}
               onChange={onChange}
               className="w-full px-3 py-2 rounded bg-gray-700 text-white border border-gray-600 focus:ring-2 focus:ring-green-500"
               required

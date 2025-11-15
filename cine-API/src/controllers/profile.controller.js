@@ -3,23 +3,18 @@ import bcrypt from "bcrypt";
 
 export const updateProfile = async (req, res) => {
   try {
-    const {nombre, apellido, fecha_nacimiento, pais, ciudad, biografia} =
+    const {nombre, apellido, fechaNacimiento, telefono, genero} =
       req.body;
 
-    const userId = User.findByPk(req.user.id);
+    const user = await User.findByPk(req.user.id);
 
-    if (!userId) {
+    if (!user) {
       return res.status(404).json({message: "Usuario no encontrado"});
     }
 
     await User.update(
       {
-        nombre,
-        apellido,
-        fecha_nacimiento,
-        pais,
-        ciudad,
-        biografia,
+      nombre,apellido, fechaNacimiento, telefono, genero
       },
       {
         where: {
