@@ -1,25 +1,14 @@
 import {MovieEditForm} from "./MovieEditForm";
 import {MovieItem} from "./MovieItem";
+import type { Film } from "../../../../types";
 
-interface Film {
-  id: number;
-  titulo: string;
-  genero: string;
-  duracion: number;
-  poster?: string;
-}
 
 interface MovieListProps {
   films: Film[];
   loading: boolean;
   error: string | null;
   editId: number | null;
-  editData: {
-    titulo: string;
-    genero: string;
-    duracion: number;
-    poster?: string;
-  };
+  editData: Film;
   onEdit: (film: Film) => void;
   onDelete: (id: number) => void;
   onEditSubmit: (e: React.FormEvent) => void;
@@ -40,27 +29,29 @@ export const MovieList = ({
   onCancelEdit,
 }: MovieListProps) => {
   if (loading) {
-    return <div className="text-white text-center">Cargando películas...</div>;
+    return (
+      <div className="text-white text-center">Cargando películas...</div>
+    );
   }
 
   if (error) {
-    return <div className="text-red-500 text-center">Error: {error}</div>;
+    return <div className="text-red-500 text-center">{error}</div>;
   }
 
   if (films.length === 0) {
     return (
-      <div className="text-gray-300 text-center">
-        No hay películas registradas.
+      <div className="text-white text-center">
+        No hay películas disponibles
       </div>
     );
   }
 
   return (
-    <section className="w-full max-w-6xl">
-      <h2 className="text-2xl font-bold mb-6 text-white text-center">
-        Gestión de películas
+    <div className="bg-white/90 rounded-2xl shadow-2xl p-6 w-full max-w-4xl">
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">
+        Películas agregadas
       </h2>
-      <ul className="space-y-4">
+      <ul className="space-y-3">
         {films.map((film) =>
           editId === film.id ? (
             <MovieEditForm
@@ -80,6 +71,6 @@ export const MovieList = ({
           )
         )}
       </ul>
-    </section>
+    </div>
   );
 };

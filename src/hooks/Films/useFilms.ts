@@ -1,13 +1,8 @@
 import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
+import type {Film} from "../../types";
 
-export interface Film {
-  id: number;
-  titulo: string;
-  genero: string;
-  duracion: number;
-  poster: string;
-}
+export type {Film}
 
 export const useFilms = () => {
   const [films, setFilms] = useState<Film[]>([]);

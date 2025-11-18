@@ -1,36 +1,27 @@
 import {toast} from "sonner";
 import {MovieForm} from "../../components/admin/components/MovieForm/MovieForm";
-import {MovieList} from "../../components/admin/components/MovieList/MovieList";
 import {useFilms} from "../../hooks/Films/useFilms";
 import axios from "axios";
 import {useState} from "react";
 import { SalaForm } from "../../components/admin/components/SalaForm/SalaForm";
 import { FuncionForm } from "../../components/admin/components/FuncionForm";
+import { MovieList } from "../../components/admin/components/MovieList/MovieList";
+import type { Film } from "../../types"
 
-interface EditData {
-  titulo: string;
-  genero: string;
-  duracion: number;
-  poster?: string;
-}
 export default function AdminPage() {
   const {films, loading, error, refetch} = useFilms();
   const [editId, setEditId] = useState<number | null>(null);
-  const [editData, setEditData] = useState<EditData>({
+  const [editData, setEditData] = useState<Film>({
+    id: 0,
     titulo: "",
     genero: "",
     duracion: 0,
     poster: "",
   });
 
-  const handleEditClick = (film: any) => {
+  const handleEditClick = (film: Film) => {
     setEditId(film.id);
-    setEditData({
-      titulo: film.titulo,
-      genero: film.genero,
-      duracion: film.duracion,
-      poster: film.poster,
-    });
+    setEditData(film);
   };
 
   const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,10 +34,18 @@ export default function AdminPage() {
 
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!editId) return;
     try {
       await axios.put(`/peliculas/${editId}`, editData);
       toast.success("Película actualizada correctamente");
       setEditId(null);
+      setEditData({
+        id: 0,
+        titulo: "",
+        genero: "",
+        duracion: 0,
+        poster: "",
+      });
       await refetch();
     } catch (error: any) {
       toast.error(
@@ -69,9 +68,20 @@ export default function AdminPage() {
     }
   };
 
+  const handleCancelEdit = () => {
+    setEditId(null);
+    setEditData({
+      id: 0,
+      titulo: "",
+      genero: "",
+      duracion: 0,
+      poster: "",
+    });
+  };
+
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-900 via-gray-800 to-gray-700 py-10 px-2 flex flex-col items-center">
-      <h1 className="text-4xl font-extrabold mb-8 text-white text-center">
+    <div className="min-h-screen bg-linear-to-br from-gray-900 via-gray-800 to-gray-700 py-10 px-4 flex flex-col items-center gap-8">
+      <h1 className="text-4xl font-extrabold text-white text-center">
         Panel de Administración
       </h1>
 
@@ -89,7 +99,7 @@ export default function AdminPage() {
         onDelete={handleDelete}
         onEditSubmit={handleEditSubmit}
         onEditChange={handleEditChange}
-        onCancelEdit={() => setEditId(null)}
+        onCancelEdit={handleCancelEdit}
       />
     </div>
   );
