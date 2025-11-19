@@ -1,8 +1,10 @@
-import {Form, Field, Formik, ErrorMessage, type FormikHelpers} from "formik";
+import {Form , Formik,  type FormikHelpers} from "formik";
 import axios from "axios";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import * as yup from "yup";
+import { Input } from "../UI/Input";
+import { Button } from "../UI/Button";
 
 interface RegisterValues {
   email: string;
@@ -41,12 +43,18 @@ export const Register = ({onSuccess}: {onSuccess?: () => void}) => {
     }
   };
 
-  return (
-    <div className="w-80 mx-auto">
+ return (
+    <div className="w-full max-w-sm mx-auto py-2">
       {error && (
-        <div className="bg-red-500 text-white p-2 mb-4 rounded-md">{error}</div>
+        <div className="bg-red-500/10 border border-red-500/50 text-red-200 p-3 mb-6 rounded-lg text-sm text-center">
+          {error}
+        </div>
       )}
-      <h1 className="text-2xl font-bold mb-6 text-center">Registrarse</h1>
+      
+      <h1 className="text-2xl font-bold mb-6 text-center text-white">
+        Crear cuenta
+      </h1>
+
       <Formik
         initialValues={{email: "", password: ""}}
         onSubmit={handleSubmit}
@@ -54,55 +62,13 @@ export const Register = ({onSuccess}: {onSuccess?: () => void}) => {
         validateOnBlur
         validateOnChange
       >
-        {({errors, touched}) => (
-          <Form className="flex flex-col gap-4" noValidate>
-            <Field
-              id="email"
-              type="email"
-              name="email"
-              placeholder="Email"
-              aria-invalid={Boolean(touched.email && errors.email)}
-              aria-describedby="email-error"
-              className={`p-2 border rounded-md ${
-                touched.email && errors.email
-                  ? "border-red-500"
-                  : "border-gray-300"
-              }`}
-            />
-            <ErrorMessage
-              name="email"
-              component="div"
-              id="email-error"
-              aria-live="polite"
-              className="text-red-500 text-sm"
-            />
-            <Field
-              id="password"
-              type="password"
-              name="password"
-              placeholder="Contraseña"
-              aria-invalid={Boolean(touched.password && errors.password)}
-              aria-describedby="password-error"
-              className={`p-2 border rounded-md ${
-                touched.password && errors.password
-                  ? "border-red-500"
-                  : "border-gray-300"
-              }`}
-            />
-            <ErrorMessage
-              name="password"
-              component="div"
-              id="password-error"
-              aria-live="polite"
-              className="text-red-500 text-sm"
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              className="bg-white text-black px-4 py-2 rounded-md w-full font-medium hover:bg-gray-100 transition disabled:opacity-50"
-            >
-              {loading ? "Registrando..." : "Registrarse"}
-            </button>
+        {() => (
+          <Form className="flex flex-col gap-5" noValidate>
+           <Input name="email" type="email" placeholder="Correo Electronico" />
+           <Input name="password" type="password" placeholder="Contraseña" />
+           <Button type="submit" loading={loading} className="mt-2">
+             Registrarse
+           </Button>
           </Form>
         )}
       </Formik>

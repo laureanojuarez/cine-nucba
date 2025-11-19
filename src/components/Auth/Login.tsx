@@ -1,9 +1,11 @@
 import {useNavigate} from "react-router-dom";
-import {Form, Field, Formik, ErrorMessage} from "formik";
+import {Form,  Formik} from "formik";
 import axios from "axios";
 import {useState} from "react";
 import {useAuth} from "../../store/auth";
 import * as yup from "yup";
+import { Button } from "../UI/Button";
+import { Input } from "../UI/Input";
 
 export const Login = ({onSuccess}: {onSuccess?: () => void}) => {
   const setToken = useAuth((s) => s.setToken);
@@ -61,55 +63,23 @@ export const Login = ({onSuccess}: {onSuccess?: () => void}) => {
         validateOnBlur
         validateOnChange
       >
-        {({errors, touched}) => (
-          <Form className="flex flex-col gap-4" noValidate>
-            <Field
-              id="email"
+        {() => (
+          <Form className="flex flex-col gap-5" noValidate>
+            <Input
+              name="email"
               type="email"
-              name="email"
-              placeholder="Email"
-              aria-invalid={Boolean(touched.email && errors.email)}
-              aria-describedby="email-error"
-              className={`p-2 border rounded-md ${
-                touched.email && errors.email
-                  ? "border-red-500"
-                  : "border-gray-300"
-              }`}
+              placeholder="Correo electrónico"
             />
-            <ErrorMessage
-              name="email"
-              component="div"
-              id="email-error"
-              aria-live="polite"
-              className="text-red-500 text-sm"
-            />
-            <Field
-              id="password"
+            
+            <Input
+              name="password"
               type="password"
-              name="password"
               placeholder="Contraseña"
-              aria-invalid={Boolean(touched.password && errors.password)}
-              aria-describedby="password-error"
-              className={`p-2 border rounded-md ${
-                touched.password && errors.password
-                  ? "border-red-500"
-                  : "border-gray-300"
-              }`}
             />
-            <ErrorMessage
-              name="password"
-              component="div"
-              id="password-error"
-              aria-live="polite"
-              className="text-red-500 text-sm"
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              className="bg-white text-black px-4 py-2 rounded-md w-full font-medium hover:bg-gray-100 transition disabled:opacity-50"
-            >
-              {loading ? "Ingresando..." : "Iniciar Sesión"}
-            </button>
+
+            <Button type="submit" loading={loading} className="mt-2">
+              Iniciar Sesión
+            </Button>
           </Form>
         )}
       </Formik>
