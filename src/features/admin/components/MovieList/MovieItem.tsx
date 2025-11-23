@@ -8,7 +8,7 @@ interface MovieItemProps {
 
 export const MovieItem = ({ film, onEdit, onDelete }: MovieItemProps) => {
   return (
-    <li className="bg-linear-to-r from-blue-50 to-purple-50 p-4 rounded-lg shadow flex justify-between items-center border border-gray-200">
+    <li className="bg-linear-to-r from-blue-50 to-purple-50 p-4 rounded-lg shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border border-gray-200">
       <div className="flex items-center gap-4">
         {film.poster && (
           <img
@@ -23,7 +23,7 @@ export const MovieItem = ({ film, onEdit, onDelete }: MovieItemProps) => {
           <p className="text-sm text-gray-600">Duración: {film.duracion} min</p>
         </div>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 w-full sm:w-auto justify-end">
         <button
           onClick={() => onEdit(film)}
           className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded transition"

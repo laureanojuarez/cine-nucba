@@ -81,7 +81,7 @@ export default function AdminPage() {
     });
   };
 
-return (
+  return (
     <div className="min-h-screen bg-linear-to-br from-gray-900 via-gray-800 to-gray-700 text-white">
       {/* Header / Navbar */}
       <header className="bg-gray-900/50 backdrop-blur-md border-b border-gray-700 sticky top-0 z-10">
@@ -93,7 +93,7 @@ return (
             </div>
             
             {/* Navegación de Tabs */}
-            <nav className="flex space-x-4">
+            <nav className="flex space-x-4 overflow-x-auto pb-2">
               <TabButton 
                 active={activeTab === "movies"} 
                 onClick={() => setActiveTab("movies")}
@@ -172,6 +172,7 @@ return (
     </div>
   );
 }
+
 const TabButton = ({ active, onClick, icon, label }: any) => (
   <button
     onClick={onClick}
