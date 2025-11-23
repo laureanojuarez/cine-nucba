@@ -3,7 +3,7 @@ import {MoveLeft} from "lucide-react";
 import {validateSchema} from "./validateschema-profile";
 import axios from "axios";
 import {toast} from "sonner";
-import {useAuth} from "../../../store/auth";
+import {useAuth} from "../../../../store/auth";
 
 interface User {
   id: number;

@@ -1,4 +1,4 @@
-import {FilmSection} from "../../components/Films/FilmSection";
+import {FilmSection} from "../../features/films/components/FilmSection";
 
 export default function Home() {
   return (

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Login } from "../Auth/Login";
-import { Register } from "../Auth/Register";
+import { Login } from "./Login";
+import { Register } from "./Register";
 
 interface AuthTabProps {
   onClose: () => void;

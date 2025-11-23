@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import type { Film } from "../../types";
+import type { Film } from "../../../types";
 
 interface FilmCardProps {
   film: Film;

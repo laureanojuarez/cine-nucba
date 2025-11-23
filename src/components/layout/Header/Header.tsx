@@ -1,6 +1,6 @@
 import {LifeBuoy, LogIn, Menu, Ticket, User, X} from "lucide-react";
 import {Link} from "react-router-dom";
-import {useAuth} from "../../store/auth";
+import {useAuth} from "../../../store/auth";
 import logo_cine from "/images/cinerio.svg";
 import { useState } from "react";
 

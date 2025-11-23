@@ -1,12 +1,12 @@
 import {useEffect} from "react";
 import {Outlet, useLocation} from "react-router-dom";
 import {Header} from "../Header/Header";
-import {SideTab} from "../Tab/SideTab";
-import {ProfileTab} from "../Tab/ProfileTab/ProfileTab";
-import {useAuth} from "../../store/auth";
+import {SideTab} from "../../ui/SideTab";
+import {ProfileTab} from "../../../features/profile/components/ProfileTab/ProfileTab";
+import {useAuth} from "../../../store/auth";
 import {Footer} from "../Footer/Footer";
-import {useUI} from "../../store/useUI";
-import { AuthTab } from "../Tab/AuthTab";
+import {useUI} from "../../../store/useUI";
+import { AuthTab } from "../../../features/auth/components/AuthTab";
 
 const Layout = () => {
   const {pathname} = useLocation();

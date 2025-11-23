@@ -1,8 +1,8 @@
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as yup from "yup";
-import { Button } from "../../components/UI/Button";
+import { Button } from "../../components/ui/Button";
 import { Mail, MessageSquare } from "lucide-react";
-import { Input } from "../../components/UI/Input";
+import { Input } from "../../components/ui/Input";
 import { toast } from "sonner";
 
 const validationSchema = yup.object().shape({

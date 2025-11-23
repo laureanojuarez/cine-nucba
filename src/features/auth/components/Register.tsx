@@ -3,8 +3,8 @@ import axios from "axios";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import * as yup from "yup";
-import { Input } from "../UI/Input";
-import { Button } from "../UI/Button";
+import { Input } from "../../../components/ui/Input";
+import { Button } from "../../../components/ui/Button";
 
 interface RegisterValues {
   email: string;

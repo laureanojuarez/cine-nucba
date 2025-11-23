@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../../store/auth";
+import {useAuth} from "../../../../store/auth";
 import {KeyRound, LogOut, Settings, User} from "lucide-react";
 import {useState} from "react";
 import {Info} from "./Info";

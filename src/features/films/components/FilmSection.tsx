@@ -1,5 +1,5 @@
 import {FilmCard} from "./FilmCard";
-import {useFilms} from "../../hooks/Films/useFilms";
+import {useFilms} from "../../../hooks/Films/useFilms";
 
 export const FilmSection = () => {
   const {films, loading} = useFilms();

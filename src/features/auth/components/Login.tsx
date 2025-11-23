@@ -2,10 +2,10 @@ import {useNavigate} from "react-router-dom";
 import {Form,  Formik} from "formik";
 import axios from "axios";
 import {useState} from "react";
-import {useAuth} from "../../store/auth";
+import {useAuth} from "../../../store/auth";
 import * as yup from "yup";
-import { Button } from "../UI/Button";
-import { Input } from "../UI/Input";
+import { Button } from "../../../components/ui/Button";
+import { Input } from "../../../components/ui/Input";
 
 export const Login = ({onSuccess}: {onSuccess?: () => void}) => {
   const setToken = useAuth((s) => s.setToken);

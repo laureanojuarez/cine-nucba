@@ -1,6 +1,6 @@
 import Home from "./pages/Home/Home";
 import FilmDetail from "./pages/Films/[id]";
-import Layout from "./components/Layout/Layout";
+import Layout from "./components/layout/Layout/Layout";
 import Protected from "./routes/Protected";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Admin from "./pages/Admin/Admin";

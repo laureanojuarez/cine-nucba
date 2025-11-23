@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import Seats from "../../components/Seats/Seats";
+import Seats from "../../features/seats/components/Seats";
 import { useAuth } from "../../store/auth";
 import { useState } from "react";
 import { toast } from "sonner";

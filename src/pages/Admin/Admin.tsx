@@ -1,11 +1,11 @@
 import {toast} from "sonner";
-import {MovieForm} from "../../components/admin/components/MovieForm/MovieForm";
+import {MovieForm} from "../../features/admin/components/MovieForm/MovieForm";
 import {useFilms} from "../../hooks/Films/useFilms";
 import axios from "axios";
 import {useState} from "react";
-import { SalaForm } from "../../components/admin/components/SalaForm/SalaForm";
-import { FuncionForm } from "../../components/admin/components/FuncionForm";
-import { MovieList } from "../../components/admin/components/MovieList/MovieList";
+import { SalaForm } from "../../features/admin/components/SalaForm/SalaForm";
+import { FuncionForm } from "../../features/admin/components/FuncionForm";
+import { MovieList } from "../../features/admin/components/MovieList/MovieList";
 import type { Film as FilmType } from "../../types"
 import { Armchair, Calendar, Film, LayoutDashboard } from "lucide-react";
 
