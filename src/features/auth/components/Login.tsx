@@ -4,8 +4,8 @@ import axios from "axios";
 import {useState} from "react";
 import {useAuth} from "../../../store/auth";
 import * as yup from "yup";
-import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";
+import { Button } from "../../../components/ui/Button";
 
 export const Login = ({onSuccess}: {onSuccess?: () => void}) => {
   const setToken = useAuth((s) => s.setToken);
